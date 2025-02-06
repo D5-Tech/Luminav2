@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <title>Luminav</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-left">
+                <a href="#profile" class="profile-icon">
+                    <i class="fas fa-user-circle fa-2x"></i>
+                </a>
+                <a href="#home" class="app-name">Luminav</a>
+            </div>
+            <div class="header-right">
+                <a href="#location" class="location-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Kochi</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Find your bus" class="search-input">
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-grid">
+            <div class="feature-box current-events">
+                <h3><i class="fas fa-calendar-alt"></i> Current Events</h3>
+            </div>
+            <div class="feature-box lumi-coins">
+                <h3><i class="fas fa-coins"></i> Lumi Coins</h3>
+            </div>
+        </div>
+
+        <!-- Nearby Stops Section -->
+        <section class="nearby-stops">
+            <div class="stop-card">
+                <i class="fas fa-bus-alt fa-2x stop-icon"></i>
+                <div class="stop-info">
+                    <h3>Aluva Bus Stand</h3>
+                    <p>1.2 kilometers nearby</p>
+                </div>
+                <button class="walk-button">
+                    <i class="fas fa-walking"></i>
+                    <span>900m</span>
+                </button>
+            </div>
+
+            <div class="stop-card">
+                <i class="fas fa-bus-alt fa-2x stop-icon"></i>
+                <div class="stop-info">
+                    <h3>Aluva Private Bus Stand</h3>
+                    <p>5 kilometers</p>
+                </div>
+                <button class="walk-button">
+                    <i class="fas fa-walking"></i>
+                    <span>300m</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section class="current-location">
+            <h3><i class="fas fa-map-marker-alt"></i> Where I am</h3>
+            <div id="map" class="map-container"></div>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#home" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#bus" class="nav-item">
+                <i class="fas fa-bus"></i>
+                <span>Bus</span>
+            </a>
+            <a href="#wallet" class="nav-item">
+                <i class="fas fa-wallet"></i>
+                <span>Wallet</span>
+            </a>
+            <a href="#notifications" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
+            </a>
+            <a href="#profile" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" hidden>
+        <div class="search-header">
+            <button class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Find your bus" class="search-input">
+            </div>
+        </div>
+        <div class="recent-searches">
+            <h3>Recent Searches</h3>
+            <ul class="search-list">
+                <li><i class="fas fa-history"></i> Aluva Bus Stand</li>
+                <li><i class="fas fa-history"></i> Edapally Junction</li>
+                <li><i class="fas fa-history"></i> Kaloor Bus Stop</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Install Button -->
+    <div id="installButton" class="install-button" style="display: none;">
+        <button onclick="installPWA()">
+            <i class="fas fa-download"></i> Install App
+        </button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
