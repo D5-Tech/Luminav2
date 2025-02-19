@@ -202,8 +202,17 @@ function initMap() {
     }
 }
 
-// Add more bus stops to the map with improved icons
+// Updated function to add bus stops with enhanced popup information
 function addBusStops() {
+    // Common Kerala bus routes that will be used for all stops
+    const commonBusRoutes = [
+        { number: "KSRTC Swift", route: "Trivandrum - Kasaragod", arrival: "5 mins" },
+        { number: "Private AC", route: "Kochi - Bangalore", arrival: "12 mins" },
+        { number: "KSRTC Ordinary", route: "Kochi - Munnar", arrival: "15 mins" },
+        { number: "Private Limited Stop", route: "Kochi - Kozhikode", arrival: "20 mins" },
+        { number: "KURTC Electric", route: "City Circular", arrival: "8 mins" }
+    ];
+
     const busStops = [
         // Major Bus Stations
         { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571, type: "major" },
@@ -238,98 +247,170 @@ function addBusStops() {
         { name: "Chakkaraparambu Bus Stop", lat: 10.0132, lng: 76.3136, type: "small" }
     ];
 
-    // Function to create the new improved bus icon HTML
-    const getBusIconHtml = (type) => {
-        let size, color, borderColor;
-        
-        if (type === "major") {
-            size = 36;
-            color = "#E53935"; // Red
-            borderColor = "#B71C1C";
-        } else if (type === "regular") {
-            size = 30;
-            color = "#1E88E5"; // Blue
-            borderColor = "#0D47A1";
-        } else {
-            size = 24;
-            color = "#43A047"; // Green
-            borderColor = "#1B5E20";
-        }
-        
-        return `
-            <div class="custom-bus-icon" style="
-                width: ${size}px;
-                height: ${size}px;
-                background-color: ${color};
-                border: 2px solid ${borderColor};
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            ">
-                <i class="fas fa-bus" style="
-                    color: white;
-                    font-size: ${size/2}px;
-                    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-                "></i>
-            </div>
-        `;
-    };
+  // Function to generate random arrival times
+  const getRandomArrival = () => {
+    const times = ["2", "5", "8", "10", "15", "20"];
+    return times[Math.floor(Math.random() * times.length)];
+};
 
-    busStops.forEach(stop => {
-        const busIcon = L.divIcon({
-            className: 'bus-stop-marker',
-            html: getBusIconHtml(stop.type),
-            iconSize: stop.type === "major" ? [36, 36] : stop.type === "regular" ? [30, 30] : [24, 24],
-            iconAnchor: stop.type === "major" ? [18, 18] : stop.type === "regular" ? [15, 15] : [12, 12],
-            popupAnchor: [0, -10]
-        });
-
-        const marker = L.marker([stop.lat, stop.lng], { icon: busIcon })
-            .bindPopup(`
-                <div style="text-align: center; padding: 5px;">
-                    <h3 style="margin: 0 0 5px 0; color: #333; font-size: 16px;">${stop.name}</h3>
-                    <p style="margin: 0; color: #666; font-size: 14px;">${stop.type === "major" ? "Major Bus Terminal" : stop.type === "regular" ? "Regular Bus Stop" : "Local Bus Stop"}</p>
-                    <button style="
-                        margin-top: 10px;
-                        background: #4CAF50;
-                        color: white;
-                        border: none;
-                        padding: 5px 10px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        font-size: 12px;
-                    ">Get Directions</button>
-                </div>
-            `, { maxWidth: 200 })
-            .addTo(map);
-    });
-
-    // Add CSS for markers
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = `
-        .bus-stop-marker {
-            background: transparent;
+// Function to create the bus icon HTML (remains the same as your current code)
+const getBusIconHtml = (type) => {
+    let size, color, borderColor;
+    
+    if (type === "major") {
+        size = 36;
+        color = "#E53935";
+        borderColor = "#B71C1C";
+    } else if (type === "regular") {
+        size = 30;
+        color = "#1E88E5";
+        borderColor = "#0D47A1";
+    } else {
+        size = 24;
+        color = "#43A047";
+        borderColor = "#1B5E20";
+    }
+    
+    return `
+        <div class="custom-bus-icon" style="
+            width: ${size}px;
+            height: ${size}px;
+            background-color: ${color};
+            border: 2px solid ${borderColor};
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .custom-bus-icon {
-            transition: transform 0.2s ease;
-        }
-        
-        .custom-bus-icon:hover {
-            transform: scale(1.1);
-        }
-        
-        .leaflet-popup-content-wrapper {
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        ">
+            <i class="fas fa-bus" style="
+                color: white;
+                font-size: ${size/2}px;
+                text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            "></i>
+        </div>
     `;
-    document.head.appendChild(styleSheet);
+};
+
+busStops.forEach(stop => {
+    const busIcon = L.divIcon({
+        className: 'bus-stop-marker',
+        html: getBusIconHtml(stop.type),
+        iconSize: stop.type === "major" ? [36, 36] : stop.type === "regular" ? [30, 30] : [24, 24],
+        iconAnchor: stop.type === "major" ? [18, 18] : stop.type === "regular" ? [15, 15] : [12, 12],
+        popupAnchor: [0, -10]
+    });
+
+    // Generate bus routes HTML
+    const busRoutesHtml = commonBusRoutes.map(bus => `
+        <div class="bus-route" style="
+            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        ">
+            <div>
+                <strong style="color: #2196F3;">${bus.number}</strong>
+                <div style="font-size: 12px; color: #666;">${bus.route}</div>
+            </div>
+            <div style="
+                background: #4CAF50;
+                color: white;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 12px;
+                height: fit-content;
+            ">${getRandomArrival()} mins</div>
+        </div>
+    `).join('');
+
+    const marker = L.marker([stop.lat, stop.lng], { icon: busIcon })
+        .bindPopup(`
+            <div style="min-width: 250px; padding: 5px;">
+                <h3 style="margin: 0 0 5px 0; color: #333; font-size: 18px; border-bottom: 2px solid #4CAF50; padding-bottom: 8px;">
+                    ${stop.name}
+                </h3>
+                <p style="margin: 8px 0; color: #666; font-size: 14px;">
+                    ${stop.type === "major" ? "Major Bus Terminal" : stop.type === "regular" ? "Regular Bus Stop" : "Local Bus Stop"}
+                </p>
+                
+                <div style="margin: 16px 0;">
+                    <h4 style="margin: 0 0 8px 0; color: #333;">Available Buses:</h4>
+                    ${busRoutesHtml}
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button style="
+                        flex: 1;
+                        background: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 8px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                    ">Get Directions</button>
+                    <button style="
+                        flex: 1;
+                        background: #2196F3;
+                        color: white;
+                        border: none;
+                        padding: 8px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                    ">View Schedule</button>
+                </div>
+            </div>
+        `, { 
+            maxWidth: 300,
+            className: 'custom-popup'
+        })
+        .addTo(map);
+});
+
+// Add CSS for enhanced popup styling
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+    .bus-stop-marker {
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .custom-bus-icon {
+        transition: transform 0.2s ease;
+    }
+    
+    .custom-bus-icon:hover {
+        transform: scale(1.1);
+    }
+    
+    .leaflet-popup-content-wrapper {
+        border-radius: 12px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    }
+
+    .custom-popup .leaflet-popup-content {
+        margin: 8px;
+    }
+
+    .custom-popup .leaflet-popup-content-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    button:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    button:active {
+        transform: translateY(1px);
+    }
+`;
+document.head.appendChild(styleSheet);
 }
 
 // Location box click handler with smooth animation
