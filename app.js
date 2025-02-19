@@ -253,7 +253,6 @@ function addBusStops() {
     return times[Math.floor(Math.random() * times.length)];
 };
 
-// Function to create the bus icon HTML (remains the same as your current code)
 const getBusIconHtml = (type) => {
     let size, color, borderColor;
     
@@ -283,11 +282,7 @@ const getBusIconHtml = (type) => {
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         ">
-            <i class="fas fa-bus" style="
-                color: white;
-                font-size: ${size/2}px;
-                text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-            "></i>
+            <i class="fas fa-bus" style="color: white; font-size: ${size/2}px;"></i>
         </div>
     `;
 };
@@ -301,69 +296,99 @@ busStops.forEach(stop => {
         popupAnchor: [0, -10]
     });
 
-    // Generate bus routes HTML
+    // Generate bus routes HTML with more compact styling
     const busRoutesHtml = commonBusRoutes.map(bus => `
         <div class="bus-route" style="
-            border-bottom: 1px solid #eee;
-            padding: 8px 0;
+            padding: 4px 0;
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #eee;
         ">
-            <div>
-                <strong style="color: #2196F3;">${bus.number}</strong>
-                <div style="font-size: 12px; color: #666;">${bus.route}</div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="
+                    font-weight: 600;
+                    font-size: 13px;
+                    color: #2196F3;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                ">${bus.number}</div>
+                <div style="
+                    font-size: 11px;
+                    color: #666;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                ">${bus.route}</div>
             </div>
             <div style="
                 background: #4CAF50;
                 color: white;
-                padding: 2px 8px;
-                border-radius: 12px;
-                font-size: 12px;
-                height: fit-content;
+                padding: 2px 6px;
+                border-radius: 10px;
+                font-size: 11px;
+                white-space: nowrap;
             ">${getRandomArrival()} mins</div>
         </div>
     `).join('');
 
     const marker = L.marker([stop.lat, stop.lng], { icon: busIcon })
         .bindPopup(`
-            <div style="min-width: 250px; padding: 5px;">
-                <h3 style="margin: 0 0 5px 0; color: #333; font-size: 18px; border-bottom: 2px solid #4CAF50; padding-bottom: 8px;">
-                    ${stop.name}
-                </h3>
-                <p style="margin: 8px 0; color: #666; font-size: 14px;">
-                    ${stop.type === "major" ? "Major Bus Terminal" : stop.type === "regular" ? "Regular Bus Stop" : "Local Bus Stop"}
-                </p>
+            <div style="width: 200px; padding: 4px;">
+                <div style="
+                    margin: 0 0 4px 0;
+                    padding-bottom: 4px;
+                    border-bottom: 2px solid #4CAF50;
+                ">
+                    <h3 style="
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #333;
+                    ">${stop.name}</h3>
+                    <span style="
+                        font-size: 11px;
+                        color: #666;
+                    ">${stop.type === "major" ? "Major Bus Terminal" : stop.type === "regular" ? "Regular Bus Stop" : "Local Bus Stop"}</span>
+                </div>
                 
-                <div style="margin: 16px 0;">
-                    <h4 style="margin: 0 0 8px 0; color: #333;">Available Buses:</h4>
+                <div style="max-height: 150px; overflow-y: auto; margin: 4px 0;">
                     ${busRoutesHtml}
                 </div>
                 
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <div style="
+                    display: flex;
+                    gap: 4px;
+                    margin-top: 8px;
+                ">
                     <button style="
                         flex: 1;
                         background: #4CAF50;
                         color: white;
                         border: none;
-                        padding: 8px;
+                        padding: 6px;
                         border-radius: 4px;
                         cursor: pointer;
-                        font-size: 14px;
+                        font-size: 11px;
+                        font-weight: 500;
                     ">Get Directions</button>
                     <button style="
                         flex: 1;
                         background: #2196F3;
                         color: white;
                         border: none;
-                        padding: 8px;
+                        padding: 6px;
                         border-radius: 4px;
                         cursor: pointer;
-                        font-size: 14px;
+                        font-size: 11px;
+                        font-weight: 500;
                     ">View Schedule</button>
                 </div>
             </div>
-        `, { 
-            maxWidth: 300,
+        `, {
+            maxWidth: 220,
+            minWidth: 200,
             className: 'custom-popup'
         })
         .addTo(map);
@@ -372,45 +397,37 @@ busStops.forEach(stop => {
 // Add CSS for enhanced popup styling
 const styleSheet = document.createElement('style');
 styleSheet.textContent = `
-    .bus-stop-marker {
-        background: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .custom-bus-icon {
-        transition: transform 0.2s ease;
-    }
-    
-    .custom-bus-icon:hover {
-        transform: scale(1.1);
-    }
-    
-    .leaflet-popup-content-wrapper {
-        border-radius: 12px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+    .custom-popup .leaflet-popup-content-wrapper {
+        padding: 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     .custom-popup .leaflet-popup-content {
-        margin: 8px;
+        margin: 0;
+        line-height: 1.4;
     }
 
-    .custom-popup .leaflet-popup-content-wrapper {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+    .custom-popup .leaflet-popup-tip {
+        width: 12px;
+        height: 12px;
     }
 
-    button:hover {
+    .bus-route:last-child {
+        border-bottom: none;
+    }
+
+    .custom-popup button:hover {
         opacity: 0.9;
-        transform: translateY(-1px);
     }
 
-    button:active {
-        transform: translateY(1px);
+    .custom-popup button:active {
+        transform: scale(0.98);
     }
 `;
 document.head.appendChild(styleSheet);
+
 }
 
 // Location box click handler with smooth animation
