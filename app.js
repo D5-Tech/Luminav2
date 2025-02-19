@@ -173,7 +173,7 @@ function initMap() {
                     // Initial location setting - use smooth animation
                     updateUserLocation(lat, lng, true);
                     
-                    // Add some sample bus stops
+                    // Add bus stops
                     addBusStops();
                 },
                 function(error) {
@@ -202,25 +202,134 @@ function initMap() {
     }
 }
 
-// Add sample bus stops to the map
+// Add more bus stops to the map with improved icons
 function addBusStops() {
     const busStops = [
-        { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571 },
-        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084 },
-        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938 }
+        // Major Bus Stations
+        { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571, type: "major" },
+        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084, type: "major" },
+        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938, type: "major" },
+        { name: "Ernakulam KSRTC Bus Stand", lat: 9.9891, lng: 76.2846, type: "major" },
+        { name: "Vyttila Mobility Hub", lat: 9.9646, lng: 76.3192, type: "major" },
+        { name: "Kakkanad Bus Stand", lat: 10.0167, lng: 76.3434, type: "major" },
+        
+        // Regular Bus Stops
+        { name: "MG Road Bus Stop", lat: 9.9727, lng: 76.2807, type: "regular" },
+        { name: "Palarivattom Bus Stop", lat: 10.0084, lng: 76.3072, type: "regular" },
+        { name: "Tripunithura Bus Stop", lat: 9.9484, lng: 76.3470, type: "regular" },
+        { name: "Kadavanthra Bus Stop", lat: 9.9662, lng: 76.2988, type: "regular" },
+        { name: "Fort Kochi Bus Stop", lat: 9.9641, lng: 76.2420, type: "regular" },
+        { name: "Mattancherry Bus Stop", lat: 9.9577, lng: 76.2593, type: "regular" },
+        { name: "Thevara Bus Stop", lat: 9.9386, lng: 76.3016, type: "regular" },
+        { name: "Marine Drive Bus Stop", lat: 9.9801, lng: 76.2744, type: "regular" },
+        
+        // Smaller Bus Stops
+        { name: "Panampilly Nagar Bus Stop", lat: 9.9574, lng: 76.2950, type: "small" },
+        { name: "Elamkulam Bus Stop", lat: 9.9557, lng: 76.3080, type: "small" },
+        { name: "Kalathiparambil Road Bus Stop", lat: 9.9752, lng: 76.2785, type: "small" },
+        { name: "Padma Junction Bus Stop", lat: 9.9715, lng: 76.2857, type: "small" },
+        { name: "High Court Junction Bus Stop", lat: 9.9800, lng: 76.2772, type: "small" },
+        { name: "Town Hall Bus Stop", lat: 9.9830, lng: 76.2863, type: "small" },
+        { name: "Kacheripady Bus Stop", lat: 9.9902, lng: 76.2871, type: "small" },
+        { name: "North Bus Stop", lat: 9.9938, lng: 76.2905, type: "small" },
+        { name: "Chittoor Road Bus Stop", lat: 9.9664, lng: 76.2835, type: "small" },
+        { name: "Thammanam Bus Stop", lat: 9.9739, lng: 76.3124, type: "small" },
+        { name: "Pathadipalam Bus Stop", lat: 10.0266, lng: 76.3195, type: "small" },
+        { name: "Chakkaraparambu Bus Stop", lat: 10.0132, lng: 76.3136, type: "small" }
     ];
+
+    // Function to create the new improved bus icon HTML
+    const getBusIconHtml = (type) => {
+        let size, color, borderColor;
+        
+        if (type === "major") {
+            size = 36;
+            color = "#E53935"; // Red
+            borderColor = "#B71C1C";
+        } else if (type === "regular") {
+            size = 30;
+            color = "#1E88E5"; // Blue
+            borderColor = "#0D47A1";
+        } else {
+            size = 24;
+            color = "#43A047"; // Green
+            borderColor = "#1B5E20";
+        }
+        
+        return `
+            <div class="custom-bus-icon" style="
+                width: ${size}px;
+                height: ${size}px;
+                background-color: ${color};
+                border: 2px solid ${borderColor};
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            ">
+                <i class="fas fa-bus" style="
+                    color: white;
+                    font-size: ${size/2}px;
+                    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+                "></i>
+            </div>
+        `;
+    };
 
     busStops.forEach(stop => {
         const busIcon = L.divIcon({
             className: 'bus-stop-marker',
-            html: '<i class="fas fa-bus" style="color: #4CAF50; font-size: 20px;"></i>',
-            iconSize: [20, 20]
+            html: getBusIconHtml(stop.type),
+            iconSize: stop.type === "major" ? [36, 36] : stop.type === "regular" ? [30, 30] : [24, 24],
+            iconAnchor: stop.type === "major" ? [18, 18] : stop.type === "regular" ? [15, 15] : [12, 12],
+            popupAnchor: [0, -10]
         });
 
-        L.marker([stop.lat, stop.lng], { icon: busIcon })
-            .bindPopup(stop.name)
+        const marker = L.marker([stop.lat, stop.lng], { icon: busIcon })
+            .bindPopup(`
+                <div style="text-align: center; padding: 5px;">
+                    <h3 style="margin: 0 0 5px 0; color: #333; font-size: 16px;">${stop.name}</h3>
+                    <p style="margin: 0; color: #666; font-size: 14px;">${stop.type === "major" ? "Major Bus Terminal" : stop.type === "regular" ? "Regular Bus Stop" : "Local Bus Stop"}</p>
+                    <button style="
+                        margin-top: 10px;
+                        background: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 5px 10px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 12px;
+                    ">Get Directions</button>
+                </div>
+            `, { maxWidth: 200 })
             .addTo(map);
     });
+
+    // Add CSS for markers
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        .bus-stop-marker {
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .custom-bus-icon {
+            transition: transform 0.2s ease;
+        }
+        
+        .custom-bus-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+    `;
+    document.head.appendChild(styleSheet);
 }
 
 // Location box click handler with smooth animation
