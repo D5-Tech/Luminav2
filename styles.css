@@ -257,14 +257,45 @@ body {
     margin-bottom: 12px;
     color: var(--primary-dark);
 }
-
+/* Map Container Styles */
 .map-container {
-    height: 200px;
-    background: rgba(255, 255, 255, 0.9);
+    height: 300px;
+    width: 100%;
     border-radius: var(--border-radius);
     margin-bottom: 80px;
-    box-shadow: var(--box-shadow);
-    backdrop-filter: var(--backdrop-blur);
+    position: relative;
+    z-index: 1;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    background: #f8f8f8;
+    border-radius: var(--border-radius);
+}
+
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+}
+
+.user-location-marker {
+    background: transparent;
+}
+
+.pulse {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    position: relative;
+}
+
+.bus-stop-marker {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Bottom Navigation */

@@ -1,21 +1,11 @@
-// PWA Service Worker Registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful');
-            })
-            .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
-            });
-    });
-}
+// Global variables for map functionality
+let map;
+let userMarker;
 
 // DOM Elements
 const searchInput = document.querySelector('.search-input');
 const searchOverlay = document.querySelector('.search-overlay');
 const backButton = document.querySelector('.back-button');
-const mapContainer = document.getElementById('map');
 
 // Search Functionality
 searchInput.addEventListener('click', (e) => {
@@ -29,14 +19,93 @@ backButton.addEventListener('click', () => {
     searchOverlay.hidden = true;
 });
 
-// Initialize Map (using Leaflet.js as an example)
+// Map initialization function
 function initMap() {
-    if (typeof L !== 'undefined') {
-        const map = L.map(mapContainer).setView([10.0867, 76.3511], 13); // Kochi coordinates
+    console.log('Initializing map...');
+    try {
+        // Check if map container exists
+        const mapContainer = document.getElementById('map');
+        if (!mapContainer) {
+            console.error('Map container not found');
+            return;
+        }
+
+        // Initialize map with Kochi center
+        map = L.map('map', {
+            zoomControl: true,
+            attributionControl: true
+        }).setView([10.0867, 76.3511], 13);
+
+        // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
+
+        // Get user location
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    // Update map view to user location
+                    map.setView([lat, lng], 15);
+                    
+                    // Add user marker with custom icon
+                    const customIcon = L.divIcon({
+                        className: 'user-location-marker',
+                        html: '<div class="pulse"></div>',
+                        iconSize: [20, 20]
+                    });
+
+                    userMarker = L.marker([lat, lng], {
+                        icon: customIcon
+                    }).addTo(map);
+
+                    // Add some sample bus stops
+                    addBusStops();
+                },
+                function(error) {
+                    console.error("Error getting location:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // Force map to update its size
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
+
+    } catch (error) {
+        console.error('Error initializing map:', error);
     }
+}
+
+// Add sample bus stops to the map
+function addBusStops() {
+    const busStops = [
+        { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571 },
+        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084 },
+        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938 }
+    ];
+
+    busStops.forEach(stop => {
+        const busIcon = L.divIcon({
+            className: 'bus-stop-marker',
+            html: '<i class="fas fa-bus" style="color: #4CAF50; font-size: 20px;"></i>',
+            iconSize: [20, 20]
+        });
+
+        L.marker([stop.lat, stop.lng], { icon: busIcon })
+            .bindPopup(stop.name)
+            .addTo(map);
+    });
 }
 
 // Bottom Navigation Functionality
@@ -60,53 +129,36 @@ window.addEventListener('resize', () => {
     }
 });
 
-// Handle clicks on various interactive elements
+// Handle clicks on interactive elements
 document.querySelectorAll('.feature-box, .stop-card, .location-box').forEach(element => {
     element.addEventListener('click', (e) => {
-        // Add your navigation or action logic here
         console.log('Clicked:', element.className);
     });
 });
-
 
 // PWA Installation Handler
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
 
-// Listen for the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
-    
-    // Stash the event so it can be triggered later
     deferredPrompt = e;
-    
-    // Show the install button
     installButton.style.display = 'block';
 });
 
-// Installation process
 async function installPWA() {
-    if (!deferredPrompt) {
-        return;
-    }
-    
-    // Show the install prompt
+    if (!deferredPrompt) return;
     deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to the install prompt: ${outcome}`);
-    
-    // Clear the deferredPrompt variable
     deferredPrompt = null;
-    
-    // Hide the install button
     installButton.style.display = 'none';
 }
 
-// Hide the button if app is already installed
 window.addEventListener('appinstalled', (e) => {
     console.log('PWA was installed');
     installButton.style.display = 'none';
 });
+
+// Initialize map when the page loads
+window.addEventListener('load', initMap);
