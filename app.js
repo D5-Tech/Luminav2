@@ -2,6 +2,15 @@
 let map;
 let userMarker;
 
+// Favicon fallback
+const setFallbackFavicon = () => {
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/png';
+    link.rel = 'icon';
+    link.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB9UlEQVR4AWJwL/ABtGdmZjpAxX+g4XBzczENDQ0MDAwM/4GB/v7+/9HR0f/FxcX/xcXF/7m5uf+pqan/qamp/9nZ2f+5ubn/xcXF/8XFxf/R0dH/0dHR/wMDA/8DAwP/gYGB/4GB';
+    document.getElementsByTagName('head')[0].appendChild(link);
+};
+
 // DOM Elements
 const searchInput = document.querySelector('.search-input');
 const searchOverlay = document.querySelector('.search-overlay');
@@ -67,14 +76,19 @@ function initMap() {
                     addBusStops();
                 },
                 function(error) {
-                    console.error("Error getting location:", error);
+                    console.log("Geolocation error:", error.message);
+                    // Fall back to default location and add bus stops
+                    addBusStops();
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 5000,
+                    timeout: 10000,
                     maximumAge: 0
                 }
             );
+        } else {
+            console.log("Geolocation not supported");
+            addBusStops();
         }
 
         // Force map to update its size
@@ -107,6 +121,17 @@ function addBusStops() {
             .addTo(map);
     });
 }
+
+// Location box click handler
+document.querySelector('.location-box').addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('Location box clicked');
+    if (map && userMarker) {
+        map.setView(userMarker.getLatLng(), 15);
+    } else {
+        map.setView([10.0867, 76.3511], 13);
+    }
+});
 
 // Bottom Navigation Functionality
 const navItems = document.querySelectorAll('.nav-item');
@@ -160,5 +185,32 @@ window.addEventListener('appinstalled', (e) => {
     installButton.style.display = 'none';
 });
 
+// Add pulsing animation CSS
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+.user-location-marker .pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+`;
+document.head.appendChild(styleSheet);
+
 // Initialize map when the page loads
-window.addEventListener('load', initMap);
+window.addEventListener('load', () => {
+    initMap();
+    setFallbackFavicon();
+});
