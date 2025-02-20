@@ -1,0 +1,217 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* App container layout */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Header styles */
+header {
+    background-color: #0066cc;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Main content area */
+main {
+    flex: 1;
+    position: relative;
+}
+
+/* Map container */
+#map {
+    width: 100%;
+    height: calc(100vh - 120px);
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Bus stop marker styles */
+.bus-stop-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.bus-icon {
+    font-size: 24px;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+}
+
+/* Current location marker styles */
+.current-location-marker {
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.current-location-dot {
+    width: 12px;
+    height: 12px;
+    background: #4CAF50;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid white;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+
+.current-location-pulse {
+    width: 20px;
+    height: 20px;
+    background: rgba(76, 175, 80, 0.4);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: locationPulse 2s ease-out infinite;
+}
+
+/* Pulse animation for current location */
+@keyframes locationPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* Bus stop popup styles */
+.bus-stop-popup {
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+.bus-stop-popup strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #1976d2;
+    font-size: 14px;
+}
+
+.bus-stop-popup div {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #333;
+}
+
+/* Leaflet map custom styles */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.leaflet-popup-content {
+    margin: 8px 12px;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color: #666;
+    padding: 8px 8px 0 0;
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Loading indicator (optional) */
+.loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.loading-indicator.active {
+    display: block;
+}
+
+/* Media queries */
+@media screen and (min-width: 376px) {
+    #map {
+        height: calc(100vh - 130px);
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .bus-stop-popup {
+        min-width: 200px;
+        padding: 12px;
+    }
+    
+    .bus-stop-popup strong {
+        font-size: 16px;
+    }
+    
+    .bus-stop-popup div {
+        font-size: 14px;
+    }
+}
+
+/* PWA specific styles */
+@media (display-mode: standalone) {
+    .app-container {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .current-location-dot {
+        border-width: 3px;
+    }
+    
+    .bus-icon {
+        filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+    }
+}
