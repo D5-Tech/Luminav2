@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Try with a larger radius if no bus stops found initially
     function searchWithLargerRadius(lat, lng) {
-        const largerRadius = 3000; // 3km radius
+        const largerRadius = 10000; // 3km radius
         const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(node["highway"="bus_stop"](around:${largerRadius},${lat},${lng});node["public_transport"="platform"](around:${largerRadius},${lat},${lng}););out;`;
         
         fetch(overpassUrl)
