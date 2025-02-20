@@ -459,5 +459,150 @@ body {
         overflow-y: auto;
     }
 }
+/* Additional Responsive Styles - Add these at the end of your existing CSS file */
 
+/* Base responsive adjustments */
+:root {
+    --container-max-width: 600px;
+    --container-padding: 16px;
+}
+
+/* Fluid typography */
+.app-name {
+    font-size: clamp(18px, 5vw, 22px);
+}
+
+.feature-box h3 {
+    font-size: clamp(16px, 4vw, 18px);
+}
+
+.stop-info h3 {
+    font-size: clamp(14px, 3.5vw, 16px);
+}
+
+/* Enhanced Mobile Responsive Rules */
+@media screen and (max-width: 320px) {
+    .app-container {
+        padding: 10px;
+    }
+    
+    .feature-box {
+        padding: 14px;
+    }
+    
+    .stop-card {
+        padding: 12px;
+    }
+    
+    .walk-button {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    
+    .search-box {
+        padding: 10px;
+    }
+    
+    .bottom-nav {
+        padding: 8px 4px;
+    }
+}
+
+@media screen and (min-width: 321px) and (max-width: 375px) {
+    .app-container {
+        padding: 12px;
+    }
+    
+    .feature-box {
+        padding: 16px;
+    }
+    
+    .map-container {
+        height: 280px;
+    }
+}
+
+@media screen and (min-width: 376px) and (max-width: 425px) {
+    .app-container {
+        padding: 14px;
+        margin: 0 auto;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+}
+
+/* Tablet/Larger Phone Adjustments */
+@media screen and (min-width: 426px) {
+    .app-container {
+        max-width: var(--container-max-width);
+        margin: 0 auto;
+        border-radius: var(--border-radius);
+        box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .map-container {
+        height: 350px;
+    }
+}
+
+/* Landscape Mode Optimizations */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    .map-container {
+        height: 200px;
+        margin-bottom: 60px;
+    }
+    
+    .features-grid {
+        margin-bottom: 16px;
+    }
+    
+    .bottom-nav {
+        padding-bottom: 8px;
+    }
+}
+
+/* Safe Area Insets for Modern Phones */
+@supports (padding: max(0px)) {
+    .app-container {
+        padding-left: max(var(--container-padding), env(safe-area-inset-left));
+        padding-right: max(var(--container-padding), env(safe-area-inset-right));
+        padding-top: max(var(--container-padding), env(safe-area-inset-top));
+    }
+    
+    .bottom-nav {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+}
+
+/* High-DPI Screen Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .search-box,
+    .feature-box,
+    .stop-card {
+        backdrop-filter: var(--backdrop-blur);
+    }
+}
+
+/* Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    .feature-box,
+    .stop-card,
+    .walk-button {
+        cursor: default;
+    }
+    
+    .walk-button:active,
+    .feature-box:active,
+    .stop-card:active {
+        transform: scale(0.98);
+    }
+}
 
