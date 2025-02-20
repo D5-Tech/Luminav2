@@ -1,19 +1,19 @@
 {
   "name": "Bus Stop Finder",
   "short_name": "BusStops",
-  "description": "Find bus stops near your current location",
+  "description": "Find nearby bus stops with location tracking",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0066cc",
+  "background_color": "#e8f5e9",
+  "theme_color": "#43A047",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

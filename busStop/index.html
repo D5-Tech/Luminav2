@@ -3,37 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Stop Finder</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Nearby Bus Stops</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.css">
+    <link rel="stylesheet" href="map-styles.css">
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <h1>Bus Stop Finder</h1>
-        </header>
-        <main>
-            <div id="map"></div>
-        </main>
-        <footer>
-            <p>Data © OpenStreetMap contributors</p>
-        </footer>
+    <div class="map-container">
+        <div class="back-button">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div id="map"></div>
+        <div class="attribution">
+            © OpenStreetMap contributors
+        </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js"></script>
-    <script>
-        // Register Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-                console.error('Service Worker registration failed:', error);
-            });
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.js"></script>
+    <script src="map-script.js"></script>
 </body>
 </html>

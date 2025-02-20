@@ -6,9 +6,9 @@ const urlsToCache = [
   '/app.js',
   '/manifest.json',
   '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/icons/icon-512x512.png',
+  '/busStop/index.html',  // Add this line
 ];
-
 // Helper function to determine if a request should be cached
 const shouldCache = (url) => {
   // Don't cache third-party requests that might cause CORS issues
