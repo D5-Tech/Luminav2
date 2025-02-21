@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    
+    <title>Bus Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4CAF50, #795548);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        .location-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .location-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .location-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .location-button {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .location-button:hover {
+            transform: scale(1.1);
+        }
+
+        .connector {
+            width: 2px;
+            height: 30px;
+            background: #4CAF50;
+            margin: 0 auto;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .connector::before,
+        .connector::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .connector::before { top: -4px; }
+        .connector::after { bottom: -4px; }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .loading {
+            position: absolute;
+            right: 45px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4CAF50;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="history.back()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </button>
+
+    <div class="container">
+        <div class="location-box">
+            <div class="input-group">
+                <input type="text" class="location-input" id="startLocation" placeholder="Enter starting point">
+                <div class="loading" id="locationLoading"></div>
+                <button class="location-button" id="locationButton">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                        <circle cx="12" cy="12" r="8"/>
+                        <path d="M12 8v8M8 12h8"/>
+                    </svg>
+                </button>
+                <div class="suggestions" id="startSuggestions"></div>
+                <div class="error-message" id="locationError"></div>
+            </div>
+            
+            <div class="connector"></div>
+            
+            <div class="input-group">
+                <input type="text" class="location-input" id="destination" placeholder="Enter destination">
+                <div class="suggestions" id="destSuggestions"></div>
+            </div>
+        </div>
+
+        <a href="#" class="submit-button">Find Bus Routes</a>
+    </div>
+
+    <script>
+        // Common location names database
+        const commonLocations = {
+            // "Kochi": ["Kochi", "Ernakulam", "Kakkanad", "Aluva", "Edappally", "Vyttila", "Kaloor", "Palarivattom", "Thrippunithura", "Angamaly", "Perumbavoor", "Kalamassery", "North Paravur", "Cherai", "Fort Kochi", "Mattancherry", "Marine Drive", "Willingdon Island", "Kumbalangi", "Kakkanad", "Infopark", "Smart City", "Cochin University", "MG Road", "Banerji Road"],
+            "bus": ["Main Bus Stand", "City Bus Station", "Central Bus Terminal", "Bus Stop"],
+            "kochi": ["Ernakulam", "Aluva", "Edappally", "Kaloor", "Palarivattom", "Thrippunithura", "Angamaly", "Perumbavoor", "Kalamassery", "North Paravur", "Cherai", "Fort Kochi", "Mattancherry", "Marine Drive", "Willingdon Island", "Kumbalangi", "Kakkanad", "Infopark", "Smart City"],
+            "railway": ["Railway Station", "Metro Station", "Train Station"],
+            "market": ["City Market", "Central Market", "Shopping Complex", "Local Market"],
+            "hospital": ["General Hospital", "City Hospital", "Medical Center", "Health Complex"],
+            "park": ["Central Park", "City Park", "Garden", "Public Park"],
+            "mall": ["City Mall", "Shopping Mall", "Plaza", "Shopping Center"],
+            "college": ["City College", "University", "Educational Institute", "School"],
+            "temple": ["Main Temple", "Temple Complex", "Church", "Mosque"],
+            "stadium": ["Sports Stadium", "Cricket Ground", "Sports Complex"],
+            "area": ["City Center", "Downtown", "Business District", "Residential Area"]
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const locationButton = document.getElementById('locationButton');
+            const startInput = document.getElementById('startLocation');
+            const destInput = document.getElementById('destination');
+            const loadingSpinner = document.getElementById('locationLoading');
+            const locationError = document.getElementById('locationError');
+            const startSuggestions = document.getElementById('startSuggestions');
+            const destSuggestions = document.getElementById('destSuggestions');
+
+            // Function to show suggestions based on input
+            function showSuggestions(input, suggestionsDiv) {
+                const value = input.value.toLowerCase();
+                if (value.length < 2) {
+                    suggestionsDiv.classList.remove('active');
+                    return;
+                }
+
+                let allSuggestions = [];
+                for (let key in commonLocations) {
+                    if (key.includes(value)) {
+                        allSuggestions = allSuggestions.concat(commonLocations[key]);
+                    }
+                }
+
+                if (allSuggestions.length > 0) {
+                    suggestionsDiv.innerHTML = allSuggestions
+                        .map(place => `<div class="suggestion-item">${place}</div>`)
+                        .join('');
+                    suggestionsDiv.classList.add('active');
+
+                    // Add click handlers to suggestions
+                    suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            input.value = item.textContent;
+                            suggestionsDiv.classList.remove('active');
+                        });
+                    });
+                } else {
+                    suggestionsDiv.classList.remove('active');
+                }
+            }
+
+            // Add input listeners for suggestions
+            startInput.addEventListener('input', () => showSuggestions(startInput, startSuggestions));
+            destInput.addEventListener('input', () => showSuggestions(destInput, destSuggestions));
+
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.input-group')) {
+                    startSuggestions.classList.remove('active');
+                    destSuggestions.classList.remove('active');
+                }
+            });
+
+            locationButton.addEventListener('click', () => {
+                loadingSpinner.classList.add('active');
+                locationError.classList.remove('active');
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const nearbyPlace = getNearbyPlace(position.coords);
+                            startInput.value = nearbyPlace;
+                            loadingSpinner.classList.remove('active');
+                        },
+                        (error) => {
+                            loadingSpinner.classList.remove('active');
+                            locationError.textContent = getErrorMessage(error);
+                            locationError.classList.add('active');
+                        },
+                        { 
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        }
+                    );
+                } else {
+                    loadingSpinner.classList.remove('active');
+                    locationError.textContent = "Location is not supported by your browser";
+                    locationError.classList.add('active');
+                }
+            });
+
+            function getNearbyPlace(coords) {
+                const places = [
+                    "Local Bus Stop",
+                    "City Center Bus Station",
+                    "Main Transport Hub",
+                    "Central Bus Terminal",
+                    "City Bus Stand",
+                    "Public Transport Station",
+                    "Bus Terminal",
+                    "Transit Center"
+                ];
+                
+                const randomIndex = Math.floor(Math.abs(Math.sin(coords.latitude + coords.longitude) * places.length));
+                return places[randomIndex];
+            }
+
+            function getErrorMessage(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        return "Please allow location access";
+                    case error.POSITION_UNAVAILABLE:
+                        return "Location information unavailable";
+                    case error.TIMEOUT:
+                        return "Location request timed out";
+                    default:
+                        return "An unknown error occurred";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
