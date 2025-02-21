@@ -48,12 +48,7 @@ const backButton = document.querySelector('.back-button');
 const locationButton = document.getElementById('location-button');
 
 // Search Functionality
-searchInput.addEventListener('click', (e) => {
-    if (window.innerWidth <= 375) {
-        searchOverlay.hidden = false;
-        document.querySelector('.search-overlay .search-input').focus();
-    }
-});
+// 
 
 backButton.addEventListener('click', () => {
     searchOverlay.hidden = true;
@@ -301,6 +296,11 @@ function isElementInViewport(el) {
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
 }  
+
+// Add this function to your app.js file
+// Add this function to your app.js file
+
+
   // Call after map initialization
   resizeMapContainer();
 // Updated function to add bus stops with enhanced popup information
@@ -310,44 +310,20 @@ function addBusStops() {
     // Common Kerala bus routes that will be used for all stops
     const commonBusRoutes = [
         { number: "KSRTC Swift", route: "Trivandrum - Kasaragod", arrival: "5 mins" },
-        { number: "Private AC", route: "Kochi - Bangalore", arrival: "12 mins" },
-        { number: "KSRTC Ordinary", route: "Kochi - Munnar", arrival: "15 mins" },
-        { number: "Private Limited Stop", route: "Kochi - Kozhikode", arrival: "20 mins" },
-        { number: "KURTC Electric", route: "City Circular", arrival: "8 mins" }
+
     ];
 
     const busStops = [
         // Major Bus Stations
         { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571, type: "major" },
-        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084, type: "major" },
-        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938, type: "major" },
-        { name: "Ernakulam KSRTC Bus Stand", lat: 9.9891, lng: 76.2846, type: "major" },
-        { name: "Vyttila Mobility Hub", lat: 9.9646, lng: 76.3192, type: "major" },
-        { name: "Kakkanad Bus Stand", lat: 10.0167, lng: 76.3434, type: "major" },
-        
+
         // Regular Bus Stops
         { name: "MG Road Bus Stop", lat: 9.9727, lng: 76.2807, type: "regular" },
-        { name: "Palarivattom Bus Stop", lat: 10.0084, lng: 76.3072, type: "regular" },
-        { name: "Tripunithura Bus Stop", lat: 9.9484, lng: 76.3470, type: "regular" },
-        { name: "Kadavanthra Bus Stop", lat: 9.9662, lng: 76.2988, type: "regular" },
-        { name: "Fort Kochi Bus Stop", lat: 9.9641, lng: 76.2420, type: "regular" },
-        { name: "Mattancherry Bus Stop", lat: 9.9577, lng: 76.2593, type: "regular" },
-        { name: "Thevara Bus Stop", lat: 9.9386, lng: 76.3016, type: "regular" },
-        { name: "Marine Drive Bus Stop", lat: 9.9801, lng: 76.2744, type: "regular" },
+
         
         // Smaller Bus Stops
         { name: "Panampilly Nagar Bus Stop", lat: 9.9574, lng: 76.2950, type: "small" },
-        { name: "Elamkulam Bus Stop", lat: 9.9557, lng: 76.3080, type: "small" },
-        { name: "Kalathiparambil Road Bus Stop", lat: 9.9752, lng: 76.2785, type: "small" },
-        { name: "Padma Junction Bus Stop", lat: 9.9715, lng: 76.2857, type: "small" },
-        { name: "High Court Junction Bus Stop", lat: 9.9800, lng: 76.2772, type: "small" },
-        { name: "Town Hall Bus Stop", lat: 9.9830, lng: 76.2863, type: "small" },
-        { name: "Kacheripady Bus Stop", lat: 9.9902, lng: 76.2871, type: "small" },
-        { name: "North Bus Stop", lat: 9.9938, lng: 76.2905, type: "small" },
-        { name: "Chittoor Road Bus Stop", lat: 9.9664, lng: 76.2835, type: "small" },
-        { name: "Thammanam Bus Stop", lat: 9.9739, lng: 76.3124, type: "small" },
-        { name: "Pathadipalam Bus Stop", lat: 10.0266, lng: 76.3195, type: "small" },
-        { name: "Chakkaraparambu Bus Stop", lat: 10.0132, lng: 76.3136, type: "small" }
+
     ];
 
   // Function to generate random arrival times
@@ -649,6 +625,45 @@ window.addEventListener('appinstalled', (evt) => {
   installButton.style.display = 'none';
   console.log('App was installed');
 });
+
+// Search box navigation handling
+document.getElementById('searchBox').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default anchor behavior
+    
+    const searchPath = this.getAttribute('href');
+    try {
+        // Use window.location for navigation
+        window.location.href = searchPath;
+    } catch (error) {
+        console.error('Navigation failed:', error);
+        // Fallback navigation
+        window.location.replace(searchPath);
+    }
+});
+
+/* Add these styles to your styles.css */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    padding: 14px;
+    box-shadow: var(--box-shadow);
+    backdrop-filter: var(--backdrop-blur);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+
+.search-box:active {
+    transform: scale(0.98);
+}
+
+
+
+
+
 
 // Add animations and styling for location button
 const buttonStyleSheet = document.createElement('style');
