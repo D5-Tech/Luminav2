@@ -35,61 +35,64 @@
             </div>
         </header>
 
-        <!-- Search Section -->
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" placeholder="Find your bus" class="search-input">
-            </div>
-        </div>
-
-        <!-- Features Section -->
-        <div class="features-grid">
-            <div class="feature-box current-events">
-                <h3><i class="fas fa-calendar-alt"></i> Current Events</h3>
-            </div>
-            <div class="feature-box lumi-coins">
-                <h3><i class="fas fa-coins"></i> Lumi Coins</h3>
-            </div>
-        </div>
-
-        <!-- Nearby Stops Section -->
-        <section class="nearby-stops">
-            <div class="stop-card">
-                <i class="fas fa-bus-alt fa-2x stop-icon"></i>
-                <div class="stop-info">
-                    <h3>Aluva Bus Stand</h3>
-                    <p>1.2 kilometers nearby</p>
+        <!-- Main Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Search Section -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Find your bus" class="search-input">
                 </div>
-                <button class="walk-button">
-                    <i class="fas fa-walking"></i>
-                    <span>900m</span>
-                </button>
             </div>
 
-            <div class="stop-card">
-                <i class="fas fa-bus-alt fa-2x stop-icon"></i>
-                <div class="stop-info">
-                    <h3>Aluva Private Bus Stand</h3>
-                    <p>5 kilometers</p>
+            <!-- Features Section -->
+            <div class="features-grid">
+                <div class="feature-box current-events">
+                    <h3><i class="fas fa-calendar-alt"></i> Current Events</h3>
                 </div>
-                <button class="walk-button">
-                    <i class="fas fa-walking"></i>
-                    <span>300m</span>
-                </button>
+                <div class="feature-box lumi-coins">
+                    <h3><i class="fas fa-coins"></i> Lumi Coins</h3>
+                </div>
             </div>
-        </section>
 
-        <!-- Location Section with Map -->
-        <section class="current-location">
-            <h3><i class="fas fa-map-marker-alt"></i> Where I am</h3>
-            <div class="map-container">
-                <div id="map"></div>
-                <button id="location-button" class="location-button" title="Track my location">
-                    <i class="fas fa-location-arrow"></i>
-                </button>
-            </div>
-        </section>
+            <!-- Nearby Stops Section -->
+            <section class="nearby-stops">
+                <div class="stop-card">
+                    <i class="fas fa-bus-alt fa-2x stop-icon"></i>
+                    <div class="stop-info">
+                        <h3>Aluva Bus Stand</h3>
+                        <p>1.2 kilometers nearby</p>
+                    </div>
+                    <button class="walk-button">
+                        <i class="fas fa-walking"></i>
+                        <span>900m</span>
+                    </button>
+                </div>
+
+                <div class="stop-card">
+                    <i class="fas fa-bus-alt fa-2x stop-icon"></i>
+                    <div class="stop-info">
+                        <h3>Aluva Private Bus Stand</h3>
+                        <p>5 kilometers</p>
+                    </div>
+                    <button class="walk-button">
+                        <i class="fas fa-walking"></i>
+                        <span>300m</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Location Section with Map -->
+            <section class="current-location">
+                <h3><i class="fas fa-map-marker-alt"></i> Where I am</h3>
+                <div class="map-container">
+                    <div id="map"></div>
+                    <button id="location-button" class="location-button" title="Track my location">
+                        <i class="fas fa-location-arrow"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
 
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
@@ -97,7 +100,8 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="busStop/index.html" class="nav-item">                <i class="fas fa-bus"></i>
+            <a href="busStop/index.html" class="nav-item">
+                <i class="fas fa-bus"></i>
                 <span>Nearest Stop</span>
             </a>
             <a href="#wallet" class="nav-item">

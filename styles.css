@@ -869,3 +869,84 @@ body {
   .feature-box h3 {
     font-size: clamp(14px, 3.5vw, 18px);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Add to your existing CSS */
+body, html {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+/* Content wrapper to allow for proper flexbox distribution */
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make map responsive */
+.map-container {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+/* Adjust header and search to be more compact */
+.header {
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.search-container {
+  margin-bottom: 12px;
+}
+
+/* Make feature grid more compact */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.feature-box {
+  padding: 12px;
+}
+
+/* Adjust nearby stops section */
+.nearby-stops {
+  margin-bottom: 12px;
+}
+
+.stop-card {
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+/* Handle bottom navigation better with safe area */
+.bottom-nav {
+  padding: 8px 0;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
