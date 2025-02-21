@@ -1,5 +1,8 @@
 // service-worker.js
-const CACHE_NAME = 'luminav-v2';
+const CACHE_NAME = 'luminav-v3';
+const OFFLINE_URL = '/offline.html';
+const OFFLINE_IMG = '/images/offline-map.png';
+
 const urlsToCache = [
   '/',
   '/index.html',
@@ -8,131 +11,164 @@ const urlsToCache = [
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
-  '/busStop/index.html',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+  '/offline.html',
+  '/images/offline-map.png',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
 ];
-// Helper function to determine if a request should be cached
-const shouldCache = (url) => {
-  // Don't cache third-party requests that might cause CORS issues
-  if (url.includes('dlnk.one')) {
-    return false;
-  }
-  
-  // Cache your app's resources and OpenStreetMap tiles
-  return url.includes(self.location.origin) || 
-         url.includes('tile.openstreetmap.org') ||
-         url.includes('unpkg.com/leaflet') ||
-         url.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome');
-};
 
-// Install Service Worker
+// Cache versioning and dynamic cache
+const DYNAMIC_CACHE = 'dynamic-v1';
+const TILE_CACHE = 'map-tiles-v1';
+
+// Helper function for network-first strategy
+async function networkFirst(request) {
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(DYNAMIC_CACHE);
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || caches.match(OFFLINE_URL);
+  }
+}
+
+// Helper for map tiles caching
+async function cacheMapTile(request) {
+  const cache = await caches.open(TILE_CACHE);
+  try {
+    const networkResponse = await fetch(request);
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) return cachedResponse;
+    return new Response(
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+      {
+        headers: { 'Content-Type': 'image/png' }
+      }
+    );
+  }
+}
+
+// Install event with pre-caching
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate event with cache cleanup
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    Promise.all([
+      self.clients.claim(),
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(cacheName => 
+              cacheName.startsWith('luminav-') && 
+              cacheName !== CACHE_NAME
+            )
+            .map(cacheName => caches.delete(cacheName))
+        );
+      })
+    ])
+  );
+});
+
+// Fetch event with improved strategies
+self.addEventListener('fetch', event => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Handle map tile requests
+  if (url.href.includes('tile.openstreetmap.org')) {
+    event.respondWith(cacheMapTile(request));
+    return;
+  }
+
+  // Handle API requests
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Handle static assets
+  event.respondWith(
+    caches.match(request)
+      .then(response => {
+        if (response) return response;
+
+        return fetch(request).then(response => {
+          // Cache successful responses
+          if (response.ok && response.type === 'basic') {
+            const responseToCache = response.clone();
+            caches.open(DYNAMIC_CACHE)
+              .then(cache => cache.put(request, responseToCache));
+          }
+          return response;
+        }).catch(() => {
+          // Return offline page for navigation requests
+          if (request.mode === 'navigate') {
+            return caches.match(OFFLINE_URL);
+          }
+          // Return offline image for image requests
+          if (request.destination === 'image') {
+            return caches.match(OFFLINE_IMG);
+          }
+          return null;
+        });
       })
   );
 });
 
-// Fetch event with improved error handling
-self.addEventListener('fetch', event => {
-  // Check if this is a request that might cause CORS issues
-  const url = event.request.url;
-  
-  // Handle potentially problematic requests
-  if (url.includes('dlnk.one')) {
-    // Return an empty JSON response
-    event.respondWith(
-      new Response('{}', {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-    );
-    return;
-  }
-  
-  // For all other requests, try the cache first
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request because it can only be used once
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest)
-          .then(response => {
-            // Check if we received a valid response
-           // Check if we received a valid response
-if (!response || response.status !== 200) {
-  // Don't cache non-successful responses
-  return response;
-}
-
-// For cross-origin resources like CDN files, we can still cache if they're in our allowlist
-if (response.type !== 'basic' && !shouldCache(url)) {
-  return response;
-}
-            
-            // If this is a resource we want to cache
-            if (shouldCache(url)) {
-              // Clone the response because it can only be used once
-              const responseToCache = response.clone();
-              
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-            
-            return response;
-          })
-          .catch(error => {
-            console.error('Fetch failed:', error);
-            // For OpenStreetMap tiles, try to return a placeholder image
-            if (url.includes('tile.openstreetmap.org')) {
-              return new Response(
-                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 
-                { status: 200, headers: { 'Content-Type': 'image/png' } }
-              );
-            }
-            
-            // For CSS files, return minimal CSS
-            if (url.endsWith('.css')) {
-              return new Response(
-                'body{font-family:system-ui;background:#f0f0f0;}', 
-                { status: 200, headers: { 'Content-Type': 'text/css' } }
-              );
-            }
-            
-            // For JavaScript files, return empty JS object
-            if (url.endsWith('.js')) {
-              return new Response(
-                '{}', 
-                { status: 200, headers: { 'Content-Type': 'application/javascript' } }
-              );
-            }
-          });
-
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
+// Background sync for offline form submissions
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-forms') {
+    event.waitUntil(
+      // Handle form data sync
+      self.registration.storage.get('offline-forms')
+        .then(forms => {
+          return Promise.all(forms.map(form => 
+            fetch('/api/submit-form', {
+              method: 'POST',
+              body: JSON.stringify(form)
+            })
+          ));
         })
-      );
-    })
+        .then(() => self.registration.storage.delete('offline-forms'))
+    );
+  }
+});
+
+// Push notification handling
+self.addEventListener('push', event => {
+  const options = {
+    body: event.data.text(),
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/badge-72x72.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('Luminav Update', options)
+  );
+});
+
+// Notification click handling
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
   );
 });

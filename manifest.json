@@ -1,36 +1,23 @@
 {
-    "name": "Luminav",
-    "short_name": "Luminav",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#4CAF50",
-    "orientation": "any",
-    "display_override": ["window-controls-overlay"],
-    "icons": [
+  "name": "Luminav",
+  "short_name": "Luminav",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait",
+  "icons": [
       {
-        "src": "icons/icon-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any maskable"
+          "src": "icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
       },
       {
-        "src": "icons/icon-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "any maskable"
+          "src": "icons/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
       }
-    ],
-    "shortcuts": [
-      {
-        "name": "Search Bus",
-        "url": "/?action=search",
-        "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-      },
-      {
-        "name": "Nearby Stops",
-        "url": "/?action=nearby",
-        "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-      }
-    ]
-  }
+  ]
+}

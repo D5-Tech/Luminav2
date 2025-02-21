@@ -64,20 +64,6 @@ locationButton.addEventListener('click', () => {
     toggleLocationTracking();
 });
 
-
-function setCorrectHeight() {
-    // First get the viewport height and multiple it by 1% to get a value for a vh unit
-    let vh = window.innerHeight * 0.01;
-    // Set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    
-    // Force map to update its size when viewport changes
-    if (map) {
-      setTimeout(() => map.invalidateSize(), 100);
-    }
-  }
-
-  
 // Toggle location tracking
 function toggleLocationTracking() {
     if (isLocationTracking) {
@@ -254,20 +240,44 @@ function addBusStops() {
     // Common Kerala bus routes that will be used for all stops
     const commonBusRoutes = [
         { number: "KSRTC Swift", route: "Trivandrum - Kasaragod", arrival: "5 mins" },
-
+        { number: "Private AC", route: "Kochi - Bangalore", arrival: "12 mins" },
+        { number: "KSRTC Ordinary", route: "Kochi - Munnar", arrival: "15 mins" },
+        { number: "Private Limited Stop", route: "Kochi - Kozhikode", arrival: "20 mins" },
+        { number: "KURTC Electric", route: "City Circular", arrival: "8 mins" }
     ];
 
     const busStops = [
         // Major Bus Stations
         { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571, type: "major" },
-
+        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084, type: "major" },
+        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938, type: "major" },
+        { name: "Ernakulam KSRTC Bus Stand", lat: 9.9891, lng: 76.2846, type: "major" },
+        { name: "Vyttila Mobility Hub", lat: 9.9646, lng: 76.3192, type: "major" },
+        { name: "Kakkanad Bus Stand", lat: 10.0167, lng: 76.3434, type: "major" },
+        
         // Regular Bus Stops
         { name: "MG Road Bus Stop", lat: 9.9727, lng: 76.2807, type: "regular" },
-
+        { name: "Palarivattom Bus Stop", lat: 10.0084, lng: 76.3072, type: "regular" },
+        { name: "Tripunithura Bus Stop", lat: 9.9484, lng: 76.3470, type: "regular" },
+        { name: "Kadavanthra Bus Stop", lat: 9.9662, lng: 76.2988, type: "regular" },
+        { name: "Fort Kochi Bus Stop", lat: 9.9641, lng: 76.2420, type: "regular" },
+        { name: "Mattancherry Bus Stop", lat: 9.9577, lng: 76.2593, type: "regular" },
+        { name: "Thevara Bus Stop", lat: 9.9386, lng: 76.3016, type: "regular" },
+        { name: "Marine Drive Bus Stop", lat: 9.9801, lng: 76.2744, type: "regular" },
         
         // Smaller Bus Stops
         { name: "Panampilly Nagar Bus Stop", lat: 9.9574, lng: 76.2950, type: "small" },
-   
+        { name: "Elamkulam Bus Stop", lat: 9.9557, lng: 76.3080, type: "small" },
+        { name: "Kalathiparambil Road Bus Stop", lat: 9.9752, lng: 76.2785, type: "small" },
+        { name: "Padma Junction Bus Stop", lat: 9.9715, lng: 76.2857, type: "small" },
+        { name: "High Court Junction Bus Stop", lat: 9.9800, lng: 76.2772, type: "small" },
+        { name: "Town Hall Bus Stop", lat: 9.9830, lng: 76.2863, type: "small" },
+        { name: "Kacheripady Bus Stop", lat: 9.9902, lng: 76.2871, type: "small" },
+        { name: "North Bus Stop", lat: 9.9938, lng: 76.2905, type: "small" },
+        { name: "Chittoor Road Bus Stop", lat: 9.9664, lng: 76.2835, type: "small" },
+        { name: "Thammanam Bus Stop", lat: 9.9739, lng: 76.3124, type: "small" },
+        { name: "Pathadipalam Bus Stop", lat: 10.0266, lng: 76.3195, type: "small" },
+        { name: "Chakkaraparambu Bus Stop", lat: 10.0132, lng: 76.3136, type: "small" }
     ];
 
   // Function to generate random arrival times
@@ -646,63 +656,6 @@ function addSecurityHeaders() {
     meta.content = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.tile.openstreetmap.org; connect-src 'self' https://*.tile.openstreetmap.org";
     document.head.appendChild(meta);
 }
-
-
-
-window.addEventListener('load', setCorrectHeight);
-// Call the function on window resize and orientation change
-window.addEventListener('resize', setCorrectHeight);
-window.addEventListener('orientationchange', setCorrectHeight);
-
-// Improve map responsiveness
-function getDeviceOptimizedMapHeight() {
-  const viewportHeight = window.innerHeight;
-  const userAgent = navigator.userAgent;
-  
-  // Redmi Note 13 Pro 5G detection
-  if (userAgent.includes('Redmi Note 13 Pro') || 
-      (window.screen.height === 2412 && window.screen.width === 1080) ||
-      (window.innerHeight > 800 && window.innerWidth < 400)) {
-    return 280;
-  }
-  
-  // iPhone 12 Pro detection
-  if (userAgent.includes('iPhone') && 
-      (window.screen.height === 844 && window.screen.width === 390)) {
-    return 260;
-  }
-  
-  // Dynamic height based on viewport
-  if (viewportHeight < 700) {
-    return 220;
-  } else if (viewportHeight < 800) {
-    return 260;
-  } else {
-    return 300;
-  }
-}
-
-// Override the map initialization to use optimized height
-function resizeMapForDevice() {
-  const mapContainer = document.querySelector('.map-container');
-  if (mapContainer) {
-    const optimalHeight = getDeviceOptimizedMapHeight();
-    mapContainer.style.height = `${optimalHeight}px`;
-    
-    // Force map to redraw
-    if (map) {
-      setTimeout(() => map.invalidateSize(), 100);
-    }
-  }
-}
-
-// Call this function after map initialization and on resize
-window.addEventListener('load', function() {
-  setTimeout(resizeMapForDevice, 500);
-});
-window.addEventListener('resize', resizeMapForDevice);
-
-
 
 // Initialize everything when the page loads
 window.addEventListener('load', () => {
