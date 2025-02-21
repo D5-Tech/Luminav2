@@ -606,3 +606,266 @@ body {
     }
 }
 
+/* Responsive Breakpoints */
+:root {
+    --container-max-width: 640px;
+    --container-padding-large: 24px;
+    --container-padding-medium: 20px;
+    --container-padding-small: 16px;
+    --container-padding-xs: 12px;
+  }
+  
+  /* Base responsive container */
+  .app-container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  
+  /* 640px and below */
+  @media screen and (max-width: 640px) {
+    .app-container {
+      padding: var(--container-padding-large);
+    }
+  
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  
+    .map-container {
+      height: 400px;
+    }
+  
+    .stop-card {
+      padding: 20px;
+    }
+  
+    .search-box {
+      padding: 16px;
+    }
+  }
+  
+  /* 480px and below */
+  @media screen and (max-width: 480px) {
+    .app-container {
+      padding: var(--container-padding-medium);
+    }
+  
+    .features-grid {
+      gap: 16px;
+    }
+  
+    .map-container {
+      height: 350px;
+    }
+  
+    .header {
+      padding: 12px;
+    }
+  
+    .app-name {
+      font-size: 20px;
+    }
+  
+    .stop-card {
+      padding: 16px;
+    }
+  
+    .walk-button {
+      padding: 8px 14px;
+    }
+  
+    .nav-item {
+      font-size: 11px;
+    }
+  }
+  
+  /* 360px and below */
+  @media screen and (max-width: 360px) {
+    .app-container {
+      padding: var(--container-padding-small);
+    }
+  
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  
+    .map-container {
+      height: 300px;
+    }
+  
+    .header {
+      padding: 10px;
+    }
+  
+    .app-name {
+      font-size: 18px;
+    }
+  
+    .location-box {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+  
+    .stop-card {
+      padding: 14px;
+    }
+  
+    .stop-info h3 {
+      font-size: 14px;
+    }
+  
+    .stop-info p {
+      font-size: 12px;
+    }
+  
+    .walk-button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  
+    .search-box {
+      padding: 12px;
+    }
+  
+    .search-input {
+      font-size: 14px;
+    }
+  
+    .nav-item {
+      padding: 6px;
+      font-size: 10px;
+    }
+  
+    .nav-item i {
+      font-size: 16px;
+    }
+  }
+  
+  /* 320px and below */
+  @media screen and (max-width: 320px) {
+    .app-container {
+      padding: var(--container-padding-xs);
+    }
+  
+    .header {
+      padding: 8px;
+      margin-bottom: 16px;
+    }
+  
+    .app-name {
+      font-size: 16px;
+    }
+  
+    .profile-icon i {
+      font-size: 24px;
+    }
+  
+    .location-box {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  
+    .features-grid {
+      gap: 10px;
+    }
+  
+    .feature-box {
+      padding: 12px;
+    }
+  
+    .feature-box h3 {
+      font-size: 14px;
+    }
+  
+    .map-container {
+      height: 250px;
+    }
+  
+    .stop-card {
+      padding: 12px;
+    }
+  
+    .stop-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+    }
+  
+    .walk-button {
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+  
+    .bottom-nav {
+      padding: 8px 4px;
+    }
+  
+    .nav-item {
+      padding: 4px;
+      font-size: 9px;
+    }
+  
+    .nav-item i {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+  }
+  
+  /* Additional Optimizations */
+  
+  /* Improved touch targets for mobile */
+  @media (pointer: coarse) {
+    .nav-item,
+    .feature-box,
+    .stop-card,
+    .walk-button,
+    .search-box,
+    .location-box {
+      min-height: 44px;
+    }
+  
+    .nav-item {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+  
+  /* Handle notched phones */
+  @supports (padding: env(safe-area-inset-top)) {
+    .app-container {
+      padding-top: max(var(--container-padding-small), env(safe-area-inset-top));
+      padding-bottom: max(var(--container-padding-small), env(safe-area-inset-bottom));
+      padding-left: max(var(--container-padding-small), env(safe-area-inset-left));
+      padding-right: max(var(--container-padding-small), env(safe-area-inset-right));
+    }
+  
+    .bottom-nav {
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+  }
+  
+  /* Prevent text overflow */
+  .stop-info h3,
+  .feature-box h3,
+  .app-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Fluid typography for better readability */
+  .app-name {
+    font-size: clamp(16px, 4vw, 22px);
+  }
+  
+  .stop-info h3 {
+    font-size: clamp(14px, 3.5vw, 16px);
+  }
+  
+  .feature-box h3 {
+    font-size: clamp(14px, 3.5vw, 18px);
+  }
