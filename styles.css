@@ -262,19 +262,19 @@ body {
 }
 /* Map Container Styles */
 .map-container {
-    height: 300px;
-    width: 100%;
-    border-radius: var(--border-radius);
-    margin-bottom: 80px;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+  height: 300px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
 #map {
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius);
 }
 
 .leaflet-container {
