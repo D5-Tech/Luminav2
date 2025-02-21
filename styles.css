@@ -1,13 +1,13 @@
 /* Base Styles */
 :root {
-    --primary-color: #4CAF50;
-    --primary-light: #81C784;
-    --primary-dark: #388E3C;
-    --gradient-start: #4CAF50;
-    --gradient-end: rgba(255, 255, 255, 0.9);
-    --border-radius: 16px;
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --backdrop-blur: blur(12px);
+  --primary-color: #4CAF50;
+  --primary-light: #81C784;
+  --primary-dark: #388E3C;
+  --gradient-start: #4CAF50;
+  --gradient-end: rgba(255, 255, 255, 0.9);
+  --border-radius: 16px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --backdrop-blur: blur(12px);
 }
 
 
@@ -18,26 +18,26 @@
 
 
 .install-button {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 .install-button button {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-weight: 500;
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-weight: 500;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
 }
 
 .install-button button:hover {
-    background: var(--primary-dark);
+  background: var(--primary-dark);
 }
 
 
@@ -48,914 +48,824 @@
 
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    min-height: 100vh;
-    color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  min-height: 100vh;
+  color: #333;
 }
 
 .app-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 16px;
-    position: relative;
-    height: 100vh;
-    overflow-y: auto;
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
 }
 
 /* Header Styles */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: var(--backdrop-blur);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .profile-icon {
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
-    padding: 2px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+  padding: 2px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-icon img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
 .app-name {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--primary-dark);
-    text-decoration: none;
-    letter-spacing: -0.5px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-decoration: none;
+  letter-spacing: -0.5px;
 }
 
 .location-box {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
-    border-radius: 20px;
-    box-shadow: var(--box-shadow);
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  border-radius: 20px;
+  box-shadow: var(--box-shadow);
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: transform 0.2s ease;
 }
 
 .location-box:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Search Styles */
 .search-container {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .search-box {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: var(--border-radius);
-    padding: 14px;
-    box-shadow: var(--box-shadow);
-    backdrop-filter: var(--backdrop-blur);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius);
+  padding: 14px;
+  box-shadow: var(--box-shadow);
+  backdrop-filter: var(--backdrop-blur);
 }
 
 .search-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
-    opacity: 0.6;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  opacity: 0.6;
 }
 
 .search-input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 16px;
-    background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  background: transparent;
 }
 
 /* Features Grid */
 .features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .feature-box {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
-    padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
-    backdrop-filter: var(--backdrop-blur);
-    transition: transform 0.2s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  backdrop-filter: var(--backdrop-blur);
+  transition: transform 0.2s ease;
 }
 
 .feature-box:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .feature-box h3 {
-    color: var(--primary-dark);
-    font-size: 18px;
-    font-weight: 600;
+  color: var(--primary-dark);
+  font-size: 18px;
+  font-weight: 600;
 }
 
 /* Nearby Stops */
 .nearby-stops {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .stop-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
-    border-radius: var(--border-radius);
-    padding: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    box-shadow: var(--box-shadow);
-    backdrop-filter: var(--backdrop-blur);
-    transition: transform 0.2s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  border-radius: var(--border-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+  backdrop-filter: var(--backdrop-blur);
+  transition: transform 0.2s ease;
 }
 
 .stop-card:active {
-    transform: scale(0.99);
+  transform: scale(0.99);
 }
 
 .stop-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 16px;
-    padding: 8px;
-    background: rgba(76, 175, 80, 0.1);
-    border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+  padding: 8px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 12px;
 }
 
 .stop-info {
-    flex: 1;
+  flex: 1;
 }
 
 .stop-info h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
 }
 
 .stop-info p {
-    font-size: 14px;
-    color: #666;
+  font-size: 14px;
+  color: #666;
 }
 
 .walk-button {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s ease;
 }
 
 .walk-button:active {
-    transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 /* Map Container */
 .current-location h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--primary-dark);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--primary-dark);
 }
 /* Map Container Styles */
 .map-container {
-    height: 300px;
-    width: 100%;
-    border-radius: var(--border-radius);
-    margin-bottom: 80px;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+  height: 300px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
 #map {
-    height: 100%;
-    width: 100%;
-    border-radius: var(--border-radius);
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius);
 }
 
 .leaflet-container {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .user-location-marker {
-    background: transparent;
+  background: transparent;
 }
 
 .user-location-marker .pulse {
-    width: 20px;
-    height: 20px;
-    background: var(--primary-color);
-    border-radius: 50%;
-    position: relative;
-    animation: pulse 1.5s infinite;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  position: relative;
+  animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.2);
-        opacity: 0.7;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  0% {
+      transform: scale(1);
+      opacity: 1;
+  }
+  50% {
+      transform: scale(1.2);
+      opacity: 0.7;
+  }
+  100% {
+      transform: scale(1);
+      opacity: 1;
+  }
 }
 
 .bus-stop-marker {
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* Bottom Navigation */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: var(--backdrop-blur);
-    display: flex;
-    justify-content: space-around;
-    padding: 12px 8px;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: var(--backdrop-blur);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 8px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #666;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 8px;
-    border-radius: 12px;
-    transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
 }
 
 .nav-item.active {
-    color: var(--primary-color);
-    background: rgba(76, 175, 80, 0.1);
+  color: var(--primary-color);
+  background: rgba(76, 175, 80, 0.1);
 }
 
 .nav-item img {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 4px;
-    opacity: 0.8;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+  opacity: 0.8;
 }
 
 .nav-item.active img {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* Search Overlay */
 .search-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
-    backdrop-filter: var(--backdrop-blur);
-    z-index: 1000;
-    padding: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+  backdrop-filter: var(--backdrop-blur);
+  z-index: 1000;
+  padding: 16px;
 }
 
 .search-header {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .back-button {
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .back-button img {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .search-list {
-    list-style: none;
+  list-style: none;
 }
 
 .search-list li {
-    padding: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .search-list li:hover {
-    background: rgba(76, 175, 80, 0.05);
+  background: rgba(76, 175, 80, 0.05);
 }
 
 /* Responsive Adjustments */
 @media screen and (max-width: 375px) {
-    :root {
-        --border-radius: 14px;
-    }
+  :root {
+      --border-radius: 14px;
+  }
 
-    .app-container {
-        padding: 12px;
-    }
+  .app-container {
+      padding: 12px;
+  }
 
-    .header {
-        margin-bottom: 20px;
-    }
+  .header {
+      margin-bottom: 20px;
+  }
 
-    .profile-icon img {
-        width: 32px;
-        height: 32px;
-    }
+  .profile-icon img {
+      width: 32px;
+      height: 32px;
+  }
 
-    .app-name {
-        font-size: 20px;
-    }
+  .app-name {
+      font-size: 20px;
+  }
 
-    .feature-box {
-        padding: 16px;
-    }
+  .feature-box {
+      padding: 16px;
+  }
 
-    .stop-card {
-        padding: 14px;
-    }
+  .stop-card {
+      padding: 14px;
+  }
 
-    .walk-button {
-        padding: 6px 12px;
-        font-size: 13px;
-    }
+  .walk-button {
+      padding: 6px 12px;
+      font-size: 13px;
+  }
 }
 
 /* Handle larger screens */
 @media screen and (min-width: 376px) {
-    .app-container {
-        max-width: 375px;
-        margin: 0 auto;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: var(--backdrop-blur);
-        min-height: 100vh;
-        border-radius: 0;
-        box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
-        overflow-y: auto;
-    }
+  .app-container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: var(--backdrop-blur);
+      min-height: 100vh;
+      border-radius: 0;
+      box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+  }
 }
 /* Additional Responsive Styles - Add these at the end of your existing CSS file */
 
 /* Base responsive adjustments */
 :root {
-    --container-max-width: 600px;
-    --container-padding: 16px;
+  --container-max-width: 600px;
+  --container-padding: 16px;
 }
 
 /* Fluid typography */
 .app-name {
-    font-size: clamp(18px, 5vw, 22px);
+  font-size: clamp(18px, 5vw, 22px);
 }
 
 .feature-box h3 {
-    font-size: clamp(16px, 4vw, 18px);
+  font-size: clamp(16px, 4vw, 18px);
 }
 
 .stop-info h3 {
-    font-size: clamp(14px, 3.5vw, 16px);
+  font-size: clamp(14px, 3.5vw, 16px);
 }
 
 /* Enhanced Mobile Responsive Rules */
 @media screen and (max-width: 320px) {
-    .app-container {
-        padding: 10px;
-    }
-    
-    .feature-box {
-        padding: 14px;
-    }
-    
-    .stop-card {
-        padding: 12px;
-    }
-    
-    .walk-button {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-    
-    .search-box {
-        padding: 10px;
-    }
-    
-    .bottom-nav {
-        padding: 8px 4px;
-    }
+  .app-container {
+      padding: 10px;
+  }
+  
+  .feature-box {
+      padding: 14px;
+  }
+  
+  .stop-card {
+      padding: 12px;
+  }
+  
+  .walk-button {
+      padding: 5px 10px;
+      font-size: 12px;
+  }
+  
+  .search-box {
+      padding: 10px;
+  }
+  
+  .bottom-nav {
+      padding: 8px 4px;
+  }
 }
 
 @media screen and (min-width: 321px) and (max-width: 375px) {
-    .app-container {
-        padding: 12px;
-    }
-    
-    .feature-box {
-        padding: 16px;
-    }
-    
-    .map-container {
-        height: 280px;
-    }
+  .app-container {
+      padding: 12px;
+  }
+  
+  .feature-box {
+      padding: 16px;
+  }
+  
+  .map-container {
+      height: 280px;
+  }
 }
 
 @media screen and (min-width: 376px) and (max-width: 425px) {
-    .app-container {
-        padding: 14px;
-        margin: 0 auto;
-    }
-    
-    .map-container {
-        height: 300px;
-    }
+  .app-container {
+      padding: 14px;
+      margin: 0 auto;
+  }
+  
+  .map-container {
+      height: 300px;
+  }
 }
 
 /* Tablet/Larger Phone Adjustments */
 @media screen and (min-width: 426px) {
-    .app-container {
-        max-width: var(--container-max-width);
-        margin: 0 auto;
-        border-radius: var(--border-radius);
-        box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
-    }
-    
-    .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-    }
-    
-    .map-container {
-        height: 350px;
-    }
+  .app-container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      border-radius: var(--border-radius);
+      box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .features-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+  }
+  
+  .map-container {
+      height: 350px;
+  }
 }
 
 /* Landscape Mode Optimizations */
 @media screen and (orientation: landscape) and (max-height: 600px) {
-    .map-container {
-        height: 200px;
-        margin-bottom: 60px;
-    }
-    
-    .features-grid {
-        margin-bottom: 16px;
-    }
-    
-    .bottom-nav {
-        padding-bottom: 8px;
-    }
+  .map-container {
+      height: 200px;
+      margin-bottom: 60px;
+  }
+  
+  .features-grid {
+      margin-bottom: 16px;
+  }
+  
+  .bottom-nav {
+      padding-bottom: 8px;
+  }
 }
 
 /* Safe Area Insets for Modern Phones */
 @supports (padding: max(0px)) {
-    .app-container {
-        padding-left: max(var(--container-padding), env(safe-area-inset-left));
-        padding-right: max(var(--container-padding), env(safe-area-inset-right));
-        padding-top: max(var(--container-padding), env(safe-area-inset-top));
-    }
-    
-    .bottom-nav {
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
-    }
+  .app-container {
+      padding-left: max(var(--container-padding), env(safe-area-inset-left));
+      padding-right: max(var(--container-padding), env(safe-area-inset-right));
+      padding-top: max(var(--container-padding), env(safe-area-inset-top));
+  }
+  
+  .bottom-nav {
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
 }
 
 /* High-DPI Screen Optimizations */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .search-box,
-    .feature-box,
-    .stop-card {
-        backdrop-filter: var(--backdrop-blur);
-    }
+  .search-box,
+  .feature-box,
+  .stop-card {
+      backdrop-filter: var(--backdrop-blur);
+  }
 }
 
 /* Touch Optimizations */
 @media (hover: none) and (pointer: coarse) {
-    .nav-item,
-    .feature-box,
-    .stop-card,
-    .walk-button {
-        cursor: default;
-    }
-    
-    .walk-button:active,
-    .feature-box:active,
-    .stop-card:active {
-        transform: scale(0.98);
-    }
+  .nav-item,
+  .feature-box,
+  .stop-card,
+  .walk-button {
+      cursor: default;
+  }
+  
+  .walk-button:active,
+  .feature-box:active,
+  .stop-card:active {
+      transform: scale(0.98);
+  }
 }
 
 /* Responsive Breakpoints */
 :root {
-    --container-max-width: 640px;
-    --container-padding-large: 24px;
-    --container-padding-medium: 20px;
-    --container-padding-small: 16px;
-    --container-padding-xs: 12px;
-  }
-  
-  /* Base responsive container */
-  .app-container {
-    width: 100%;
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    min-height: 100vh;
-  }
-  
-  /* 640px and below */
-  @media screen and (max-width: 640px) {
-    .app-container {
-      padding: var(--container-padding-large);
-    }
-  
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-  
-    .map-container {
-      height: 400px;
-    }
-  
-    .stop-card {
-      padding: 20px;
-    }
-  
-    .search-box {
-      padding: 16px;
-    }
-  }
-  
-  /* 480px and below */
-  @media screen and (max-width: 480px) {
-    .app-container {
-      padding: var(--container-padding-medium);
-    }
-  
-    .features-grid {
-      gap: 16px;
-    }
-  
-    .map-container {
-      height: 350px;
-    }
-  
-    .header {
-      padding: 12px;
-    }
-  
-    .app-name {
-      font-size: 20px;
-    }
-  
-    .stop-card {
-      padding: 16px;
-    }
-  
-    .walk-button {
-      padding: 8px 14px;
-    }
-  
-    .nav-item {
-      font-size: 11px;
-    }
-  }
-  
-  /* 360px and below */
-  @media screen and (max-width: 360px) {
-    .app-container {
-      padding: var(--container-padding-small);
-    }
-  
-    .features-grid {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-  
-    .map-container {
-      height: 300px;
-    }
-  
-    .header {
-      padding: 10px;
-    }
-  
-    .app-name {
-      font-size: 18px;
-    }
-  
-    .location-box {
-      padding: 6px 10px;
-      font-size: 13px;
-    }
-  
-    .stop-card {
-      padding: 14px;
-    }
-  
-    .stop-info h3 {
-      font-size: 14px;
-    }
-  
-    .stop-info p {
-      font-size: 12px;
-    }
-  
-    .walk-button {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-  
-    .search-box {
-      padding: 12px;
-    }
-  
-    .search-input {
-      font-size: 14px;
-    }
-  
-    .nav-item {
-      padding: 6px;
-      font-size: 10px;
-    }
-  
-    .nav-item i {
-      font-size: 16px;
-    }
-  }
-  
-  /* 320px and below */
-  @media screen and (max-width: 320px) {
-    .app-container {
-      padding: var(--container-padding-xs);
-    }
-  
-    .header {
-      padding: 8px;
-      margin-bottom: 16px;
-    }
-  
-    .app-name {
-      font-size: 16px;
-    }
-  
-    .profile-icon i {
-      font-size: 24px;
-    }
-  
-    .location-box {
-      padding: 4px 8px;
-      font-size: 12px;
-    }
-  
-    .features-grid {
-      gap: 10px;
-    }
-  
-    .feature-box {
-      padding: 12px;
-    }
-  
-    .feature-box h3 {
-      font-size: 14px;
-    }
-  
-    .map-container {
-      height: 250px;
-    }
-  
-    .stop-card {
-      padding: 12px;
-    }
-  
-    .stop-icon {
-      width: 32px;
-      height: 32px;
-      margin-right: 12px;
-    }
-  
-    .walk-button {
-      padding: 4px 10px;
-      font-size: 11px;
-    }
-  
-    .bottom-nav {
-      padding: 8px 4px;
-    }
-  
-    .nav-item {
-      padding: 4px;
-      font-size: 9px;
-    }
-  
-    .nav-item i {
-      font-size: 14px;
-      margin-bottom: 2px;
-    }
-  }
-  
-  /* Additional Optimizations */
-  
-  /* Improved touch targets for mobile */
-  @media (pointer: coarse) {
-    .nav-item,
-    .feature-box,
-    .stop-card,
-    .walk-button,
-    .search-box,
-    .location-box {
-      min-height: 44px;
-    }
-  
-    .nav-item {
-      flex: 1;
-      justify-content: center;
-    }
-  }
-  
-  /* Handle notched phones */
-  @supports (padding: env(safe-area-inset-top)) {
-    .app-container {
-      padding-top: max(var(--container-padding-small), env(safe-area-inset-top));
-      padding-bottom: max(var(--container-padding-small), env(safe-area-inset-bottom));
-      padding-left: max(var(--container-padding-small), env(safe-area-inset-left));
-      padding-right: max(var(--container-padding-small), env(safe-area-inset-right));
-    }
-  
-    .bottom-nav {
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-    }
-  }
-  
-  /* Prevent text overflow */
-  .stop-info h3,
-  .feature-box h3,
-  .app-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  /* Fluid typography for better readability */
-  .app-name {
-    font-size: clamp(16px, 4vw, 22px);
-  }
-  
-  .stop-info h3 {
-    font-size: clamp(14px, 3.5vw, 16px);
-  }
-  
-  .feature-box h3 {
-    font-size: clamp(14px, 3.5vw, 18px);
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-  /* Add to your existing CSS */
-body, html {
-  height: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
+  --container-max-width: 640px;
+  --container-padding-large: 24px;
+  --container-padding-medium: 20px;
+  --container-padding-small: 16px;
+  --container-padding-xs: 12px;
 }
 
+/* Base responsive container */
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* 640px and below */
+@media screen and (max-width: 640px) {
+  .app-container {
+    padding: var(--container-padding-large);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .stop-card {
+    padding: 20px;
+  }
+
+  .search-box {
+    padding: 16px;
+  }
+}
+
+/* 480px and below */
+@media screen and (max-width: 480px) {
+  .app-container {
+    padding: var(--container-padding-medium);
+  }
+
+  .features-grid {
+    gap: 16px;
+  }
+
+  .map-container {
+    height: 350px;
+  }
+
+  .header {
+    padding: 12px;
+  }
+
+  .app-name {
+    font-size: 20px;
+  }
+
+  .stop-card {
+    padding: 16px;
+  }
+
+  .walk-button {
+    padding: 8px 14px;
+  }
+
+  .nav-item {
+    font-size: 11px;
+  }
+}
+
+/* 360px and below */
+@media screen and (max-width: 360px) {
+  .app-container {
+    padding: var(--container-padding-small);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+
+  .header {
+    padding: 10px;
+  }
+
+  .app-name {
+    font-size: 18px;
+  }
+
+  .location-box {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .stop-card {
+    padding: 14px;
+  }
+
+  .stop-info h3 {
+    font-size: 14px;
+  }
+
+  .stop-info p {
+    font-size: 12px;
+  }
+
+  .walk-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .search-box {
+    padding: 12px;
+  }
+
+  .search-input {
+    font-size: 14px;
+  }
+
+  .nav-item {
+    padding: 6px;
+    font-size: 10px;
+  }
+
+  .nav-item i {
+    font-size: 16px;
+  }
+}
+
+/* 320px and below */
+@media screen and (max-width: 320px) {
+  .app-container {
+    padding: var(--container-padding-xs);
+  }
+
+  .header {
+    padding: 8px;
+    margin-bottom: 16px;
+  }
+
+  .app-name {
+    font-size: 16px;
+  }
+
+  .profile-icon i {
+    font-size: 24px;
+  }
+
+  .location-box {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .features-grid {
+    gap: 10px;
+  }
+
+  .feature-box {
+    padding: 12px;
+  }
+
+  .feature-box h3 {
+    font-size: 14px;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+
+  .stop-card {
+    padding: 12px;
+  }
+
+  .stop-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+  }
+
+  .walk-button {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  .bottom-nav {
+    padding: 8px 4px;
+  }
+
+  .nav-item {
+    padding: 4px;
+    font-size: 9px;
+  }
+
+  .nav-item i {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+}
+
+/* Additional Optimizations */
+
+/* Improved touch targets for mobile */
+@media (pointer: coarse) {
+  .nav-item,
+  .feature-box,
+  .stop-card,
+  .walk-button,
+  .search-box,
+  .location-box {
+    min-height: 44px;
+  }
+
+  .nav-item {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Handle notched phones */
+@supports (padding: env(safe-area-inset-top)) {
+  .app-container {
+    padding-top: max(var(--container-padding-small), env(safe-area-inset-top));
+    padding-bottom: max(var(--container-padding-small), env(safe-area-inset-bottom));
+    padding-left: max(var(--container-padding-small), env(safe-area-inset-left));
+    padding-right: max(var(--container-padding-small), env(safe-area-inset-right));
+  }
+
+  .bottom-nav {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent text overflow */
+.stop-info h3,
+.feature-box h3,
+.app-name {
   overflow: hidden;
-  max-height: 100vh;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Content wrapper to allow for proper flexbox distribution */
-.content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+/* Fluid typography for better readability */
+.app-name {
+  font-size: clamp(16px, 4vw, 22px);
 }
 
-/* Make map responsive */
-.map-container {
-  flex: 1;
-  min-height: 0;
-  height: auto;
-  margin-bottom: 16px;
+.stop-info h3 {
+  font-size: clamp(14px, 3.5vw, 16px);
 }
 
-/* Adjust header and search to be more compact */
-.header {
-  padding: 8px;
-  margin-bottom: 12px;
-}
-
-.search-container {
-  margin-bottom: 12px;
-}
-
-/* Make feature grid more compact */
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.feature-box {
-  padding: 12px;
-}
-
-/* Adjust nearby stops section */
-.nearby-stops {
-  margin-bottom: 12px;
-}
-
-.stop-card {
-  padding: 10px;
-  margin-bottom: 8px;
-}
-
-/* Handle bottom navigation better with safe area */
-.bottom-nav {
-  padding: 8px 0;
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
-}
-
-
-
-.search-box {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  cursor: pointer;
+.feature-box h3 {
+  font-size: clamp(14px, 3.5vw, 18px);
 }

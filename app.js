@@ -48,7 +48,12 @@ const backButton = document.querySelector('.back-button');
 const locationButton = document.getElementById('location-button');
 
 // Search Functionality
-// 
+searchInput.addEventListener('click', (e) => {
+    if (window.innerWidth <= 375) {
+        searchOverlay.hidden = false;
+        document.querySelector('.search-overlay .search-input').focus();
+    }
+});
 
 backButton.addEventListener('click', () => {
     searchOverlay.hidden = true;
@@ -180,9 +185,6 @@ function initMap() {
             attributionControl: true,
             // Disable cross-origin requests for tiles when possible
             preferCanvas: true
-            scrollWheelZoom: true,
-dragging: !L.Browser.mobile,
-tap: false, // Disable tap handler, if present
         }).setView([10.0867, 76.3511], 13);
 
         // Add OpenStreetMap tiles with CORS handling
@@ -233,97 +235,49 @@ tap: false, // Disable tap handler, if present
     }
 }
 
-
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(registration => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        })
-        .catch(error => {
-          console.log('ServiceWorker registration failed: ', error);
-        });
-    });
-  }
-
-// Add this to your map initialization function
-function resizeMapContainer() {
-    const contentWrapper = document.querySelector('.content-wrapper');
-    const mapContainer = document.getElementById('map');
-    if (mapContainer && map) {
-        // Calculate available height
-        const headerHeight = document.querySelector('.header').offsetHeight;
-        const searchHeight = document.querySelector('.search-container').offsetHeight;
-        const featuresHeight = document.querySelector('.features-grid').offsetHeight;
-        const nearbyHeight = document.querySelector('.nearby-stops').offsetHeight;
-        const navHeight = document.querySelector('.bottom-nav').offsetHeight;
-        
-        // Set map height dynamically
-        const availableHeight = window.innerHeight - (headerHeight + searchHeight + featuresHeight + nearbyHeight + navHeight + 48); // 48px for margins
-        mapContainer.style.height = `${Math.max(250, availableHeight)}px`;
-        
-        // Force map to update its size
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 100);
-    }
-}
-  // Add event listener for resize
-// Handle content wrapper scroll
-const contentWrapper = document.querySelector('.content-wrapper');
-contentWrapper.addEventListener('scroll', () => {
-    // Update map size if it becomes visible
-    const mapContainer = document.getElementById('map');
-    if (mapContainer && isElementInViewport(mapContainer)) {
-        map.invalidateSize();
-    }
-});
-
-// Add event listener for resize
-window.addEventListener('resize', resizeMapContainer);
-
-// Call after map initialization
-resizeMapContainer();
-
-// Add this helper function at the end of your file
-function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}  
-
-// Add this function to your app.js file
-// Add this function to your app.js file
-
-
-  // Call after map initialization
-  resizeMapContainer();
-// Updated function to add bus stops with enhanced popup information
-
 // Updated function to add bus stops with enhanced popup information
 function addBusStops() {
     // Common Kerala bus routes that will be used for all stops
     const commonBusRoutes = [
         { number: "KSRTC Swift", route: "Trivandrum - Kasaragod", arrival: "5 mins" },
-
+        { number: "Private AC", route: "Kochi - Bangalore", arrival: "12 mins" },
+        { number: "KSRTC Ordinary", route: "Kochi - Munnar", arrival: "15 mins" },
+        { number: "Private Limited Stop", route: "Kochi - Kozhikode", arrival: "20 mins" },
+        { number: "KURTC Electric", route: "City Circular", arrival: "8 mins" }
     ];
 
     const busStops = [
         // Major Bus Stations
         { name: "Aluva Bus Stand", lat: 10.1004, lng: 76.3571, type: "major" },
-
+        { name: "Edapally Junction", lat: 10.0267, lng: 76.3084, type: "major" },
+        { name: "Kaloor Bus Stop", lat: 10.0007, lng: 76.2938, type: "major" },
+        { name: "Ernakulam KSRTC Bus Stand", lat: 9.9891, lng: 76.2846, type: "major" },
+        { name: "Vyttila Mobility Hub", lat: 9.9646, lng: 76.3192, type: "major" },
+        { name: "Kakkanad Bus Stand", lat: 10.0167, lng: 76.3434, type: "major" },
+        
         // Regular Bus Stops
         { name: "MG Road Bus Stop", lat: 9.9727, lng: 76.2807, type: "regular" },
-
+        { name: "Palarivattom Bus Stop", lat: 10.0084, lng: 76.3072, type: "regular" },
+        { name: "Tripunithura Bus Stop", lat: 9.9484, lng: 76.3470, type: "regular" },
+        { name: "Kadavanthra Bus Stop", lat: 9.9662, lng: 76.2988, type: "regular" },
+        { name: "Fort Kochi Bus Stop", lat: 9.9641, lng: 76.2420, type: "regular" },
+        { name: "Mattancherry Bus Stop", lat: 9.9577, lng: 76.2593, type: "regular" },
+        { name: "Thevara Bus Stop", lat: 9.9386, lng: 76.3016, type: "regular" },
+        { name: "Marine Drive Bus Stop", lat: 9.9801, lng: 76.2744, type: "regular" },
         
         // Smaller Bus Stops
         { name: "Panampilly Nagar Bus Stop", lat: 9.9574, lng: 76.2950, type: "small" },
-
+        { name: "Elamkulam Bus Stop", lat: 9.9557, lng: 76.3080, type: "small" },
+        { name: "Kalathiparambil Road Bus Stop", lat: 9.9752, lng: 76.2785, type: "small" },
+        { name: "Padma Junction Bus Stop", lat: 9.9715, lng: 76.2857, type: "small" },
+        { name: "High Court Junction Bus Stop", lat: 9.9800, lng: 76.2772, type: "small" },
+        { name: "Town Hall Bus Stop", lat: 9.9830, lng: 76.2863, type: "small" },
+        { name: "Kacheripady Bus Stop", lat: 9.9902, lng: 76.2871, type: "small" },
+        { name: "North Bus Stop", lat: 9.9938, lng: 76.2905, type: "small" },
+        { name: "Chittoor Road Bus Stop", lat: 9.9664, lng: 76.2835, type: "small" },
+        { name: "Thammanam Bus Stop", lat: 9.9739, lng: 76.3124, type: "small" },
+        { name: "Pathadipalam Bus Stop", lat: 10.0266, lng: 76.3195, type: "small" },
+        { name: "Chakkaraparambu Bus Stop", lat: 10.0132, lng: 76.3136, type: "small" }
     ];
 
   // Function to generate random arrival times
@@ -591,79 +545,28 @@ function blockExternalScripts() {
 }
 
 // PWA Installation Handler
-// PWA Installation
 let deferredPrompt;
 const installButton = document.getElementById('installButton');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent Chrome 67 and earlier from automatically showing the prompt
-  e.preventDefault();
-  // Stash the event so it can be triggered later
-  deferredPrompt = e;
-  // Show the install button
-  installButton.style.display = 'block';
+    e.preventDefault();
+    deferredPrompt = e;
+    installButton.style.display = 'block';
 });
 
-function installPWA() {
-  // Hide the install button
-  installButton.style.display = 'none';
-  // Show the prompt
-  deferredPrompt.prompt();
-  // Wait for the user to respond to the prompt
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
-    }
+async function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
     deferredPrompt = null;
-  });
+    installButton.style.display = 'none';
 }
 
-// Hide install button when app is installed
-window.addEventListener('appinstalled', (evt) => {
-  installButton.style.display = 'none';
-  console.log('App was installed');
+window.addEventListener('appinstalled', (e) => {
+    console.log('PWA was installed');
+    installButton.style.display = 'none';
 });
-
-// Search box navigation handling
-document.getElementById('searchBox').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent default anchor behavior
-    
-    const searchPath = this.getAttribute('href');
-    try {
-        // Use window.location for navigation
-        window.location.href = searchPath;
-    } catch (error) {
-        console.error('Navigation failed:', error);
-        // Fallback navigation
-        window.location.replace(searchPath);
-    }
-});
-
-/* Add these styles to your styles.css */
-.search-box {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: var(--border-radius);
-    padding: 14px;
-    box-shadow: var(--box-shadow);
-    backdrop-filter: var(--backdrop-blur);
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s ease;
-}
-
-.search-box:active {
-    transform: scale(0.98);
-}
-
-
-
-
-
 
 // Add animations and styling for location button
 const buttonStyleSheet = document.createElement('style');
