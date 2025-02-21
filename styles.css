@@ -606,266 +606,150 @@ body {
     }
 }
 
-/* Responsive Breakpoints */
+/* Improved Device-Specific Responsive Fixes */
+/* Add this to the end of your styles.css file */
+
+/* Base viewport adjustments */
 :root {
-    --container-max-width: 640px;
-    --container-padding-large: 24px;
-    --container-padding-medium: 20px;
-    --container-padding-small: 16px;
-    --container-padding-xs: 12px;
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --app-max-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
   }
   
-  /* Base responsive container */
-  .app-container {
+  /* Fix scrolling issues on all devices */
+  html, body {
+    position: fixed;
+    overflow: hidden;
     width: 100%;
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    min-height: 100vh;
+    height: 100%;
+    overscroll-behavior: none;
   }
   
-  /* 640px and below */
-  @media screen and (max-width: 640px) {
-    .app-container {
-      padding: var(--container-padding-large);
-    }
+  .app-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding-bottom: calc(70px + var(--safe-area-inset-bottom));
+    height: 100%;
+    max-height: var(--app-max-height);
+  }
   
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-  
+  /* Redmi Note 13 Pro 5G specific fixes */
+  @media screen and (width: 1080px) and (height: 2412px),
+         screen and (width: 1080px) and (device-height: 2412px),
+         screen and (width: 393px) and (height: 873px) {
     .map-container {
-      height: 400px;
+      height: 280px;
+      margin-bottom: 90px;
     }
-  
-    .stop-card {
-      padding: 20px;
-    }
-  
-    .search-box {
-      padding: 16px;
-    }
-  }
-  
-  /* 480px and below */
-  @media screen and (max-width: 480px) {
-    .app-container {
-      padding: var(--container-padding-medium);
-    }
-  
+    
     .features-grid {
-      gap: 16px;
-    }
-  
-    .map-container {
-      height: 350px;
-    }
-  
-    .header {
-      padding: 12px;
-    }
-  
-    .app-name {
-      font-size: 20px;
-    }
-  
-    .stop-card {
-      padding: 16px;
-    }
-  
-    .walk-button {
-      padding: 8px 14px;
-    }
-  
-    .nav-item {
-      font-size: 11px;
-    }
-  }
-  
-  /* 360px and below */
-  @media screen and (max-width: 360px) {
-    .app-container {
-      padding: var(--container-padding-small);
-    }
-  
-    .features-grid {
-      grid-template-columns: 1fr;
       gap: 12px;
+      margin-bottom: 20px;
     }
-  
-    .map-container {
-      height: 300px;
+    
+    .nearby-stops {
+      margin-bottom: 20px;
     }
-  
-    .header {
-      padding: 10px;
-    }
-  
-    .app-name {
-      font-size: 18px;
-    }
-  
-    .location-box {
-      padding: 6px 10px;
-      font-size: 13px;
-    }
-  
-    .stop-card {
-      padding: 14px;
-    }
-  
-    .stop-info h3 {
-      font-size: 14px;
-    }
-  
-    .stop-info p {
-      font-size: 12px;
-    }
-  
-    .walk-button {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-  
-    .search-box {
-      padding: 12px;
-    }
-  
-    .search-input {
-      font-size: 14px;
-    }
-  
-    .nav-item {
-      padding: 6px;
-      font-size: 10px;
-    }
-  
-    .nav-item i {
-      font-size: 16px;
+    
+    .bottom-nav {
+      padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
     }
   }
   
-  /* 320px and below */
-  @media screen and (max-width: 320px) {
+  /* iPhone 12 Pro specific fixes */
+  @media screen and (width: 390px) and (height: 844px),
+         screen and (device-width: 390px) and (device-height: 844px) {
     .app-container {
-      padding: var(--container-padding-xs);
+      max-width: 100%;
+      width: 100%;
     }
-  
+    
     .header {
-      padding: 8px;
+      margin-top: var(--safe-area-inset-top);
+      padding: 10px 16px;
+    }
+    
+    .map-container {
+      height: 260px;
+      margin-bottom: 90px;
+    }
+    
+    .feature-box {
+      padding: 18px 16px;
+    }
+    
+    .bottom-nav {
+      padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    }
+  }
+  
+  /* Universal improvements for better fit */
+  @media screen and (max-height: 700px) {
+    .map-container {
+      height: 220px;
+    }
+    
+    .nearby-stops {
       margin-bottom: 16px;
     }
-  
-    .app-name {
-      font-size: 16px;
-    }
-  
-    .profile-icon i {
-      font-size: 24px;
-    }
-  
-    .location-box {
-      padding: 4px 8px;
-      font-size: 12px;
-    }
-  
-    .features-grid {
-      gap: 10px;
-    }
-  
-    .feature-box {
+    
+    .stop-card {
       padding: 12px;
+      margin-bottom: 12px;
     }
+  }
   
+  @media screen and (min-height: 800px) {
+    .map-container {
+      height: 320px;
+    }
+  }
+  
+  /* Fix container width on all devices */
+  @media screen and (min-width: 376px) {
+    .app-container {
+      max-width: 100%;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+  
+  /* Better iPhone notch handling */
+  @supports (padding: max(0px)) {
+    .header {
+      padding-top: max(8px, env(safe-area-inset-top));
+    }
+    
+    .bottom-nav {
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      height: calc(60px + env(safe-area-inset-bottom));
+    }
+    
+    .install-button {
+      bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+  }
+  
+  /* Height-based adjustments for all devices */
+  @media screen and (max-height: 640px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    
     .feature-box h3 {
       font-size: 14px;
     }
-  
+    
     .map-container {
-      height: 250px;
+      height: 180px;
     }
-  
-    .stop-card {
-      padding: 12px;
-    }
-  
-    .stop-icon {
-      width: 32px;
-      height: 32px;
-      margin-right: 12px;
-    }
-  
-    .walk-button {
-      padding: 4px 10px;
-      font-size: 11px;
-    }
-  
-    .bottom-nav {
-      padding: 8px 4px;
-    }
-  
-    .nav-item {
-      padding: 4px;
-      font-size: 9px;
-    }
-  
-    .nav-item i {
-      font-size: 14px;
-      margin-bottom: 2px;
-    }
-  }
-  
-  /* Additional Optimizations */
-  
-  /* Improved touch targets for mobile */
-  @media (pointer: coarse) {
-    .nav-item,
-    .feature-box,
-    .stop-card,
-    .walk-button,
-    .search-box,
-    .location-box {
-      min-height: 44px;
-    }
-  
-    .nav-item {
-      flex: 1;
-      justify-content: center;
-    }
-  }
-  
-  /* Handle notched phones */
-  @supports (padding: env(safe-area-inset-top)) {
-    .app-container {
-      padding-top: max(var(--container-padding-small), env(safe-area-inset-top));
-      padding-bottom: max(var(--container-padding-small), env(safe-area-inset-bottom));
-      padding-left: max(var(--container-padding-small), env(safe-area-inset-left));
-      padding-right: max(var(--container-padding-small), env(safe-area-inset-right));
-    }
-  
-    .bottom-nav {
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-    }
-  }
-  
-  /* Prevent text overflow */
-  .stop-info h3,
-  .feature-box h3,
-  .app-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  /* Fluid typography for better readability */
-  .app-name {
-    font-size: clamp(16px, 4vw, 22px);
-  }
-  
-  .stop-info h3 {
-    font-size: clamp(14px, 3.5vw, 16px);
-  }
-  
-  .feature-box h3 {
-    font-size: clamp(14px, 3.5vw, 18px);
   }

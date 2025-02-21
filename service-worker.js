@@ -8,9 +8,11 @@ const urlsToCache = [
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
-  '/busStop/index.html'
+  '/busStop/index.html',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
-
 // Helper function to determine if a request should be cached
 const shouldCache = (url) => {
   // Don't cache third-party requests that might cause CORS issues
@@ -21,7 +23,8 @@ const shouldCache = (url) => {
   // Cache your app's resources and OpenStreetMap tiles
   return url.includes(self.location.origin) || 
          url.includes('tile.openstreetmap.org') ||
-         url.includes('unpkg.com/leaflet');
+         url.includes('unpkg.com/leaflet') ||
+         url.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome');
 };
 
 // Install Service Worker
@@ -67,10 +70,16 @@ self.addEventListener('fetch', event => {
         return fetch(fetchRequest)
           .then(response => {
             // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              // Don't cache non-successful responses or CORS responses
-              return response;
-            }
+           // Check if we received a valid response
+if (!response || response.status !== 200) {
+  // Don't cache non-successful responses
+  return response;
+}
+
+// For cross-origin resources like CDN files, we can still cache if they're in our allowlist
+if (response.type !== 'basic' && !shouldCache(url)) {
+  return response;
+}
             
             // If this is a resource we want to cache
             if (shouldCache(url)) {
@@ -94,10 +103,23 @@ self.addEventListener('fetch', event => {
                 { status: 200, headers: { 'Content-Type': 'image/png' } }
               );
             }
+            
+            // For CSS files, return minimal CSS
+            if (url.endsWith('.css')) {
+              return new Response(
+                'body{font-family:system-ui;background:#f0f0f0;}', 
+                { status: 200, headers: { 'Content-Type': 'text/css' } }
+              );
+            }
+            
+            // For JavaScript files, return empty JS object
+            if (url.endsWith('.js')) {
+              return new Response(
+                '{}', 
+                { status: 200, headers: { 'Content-Type': 'application/javascript' } }
+              );
+            }
           });
-      })
-  );
-});
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
@@ -114,42 +136,3 @@ self.addEventListener('activate', event => {
     })
   );
 });
-
-// manifest.json
-{
-  "name": "Luminav",
-  "short_name": "Luminav",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
-  "orientation": "any",
-  "display_override": ["window-controls-overlay"],
-  "icons": [
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Search Bus",
-      "url": "/?action=search",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Nearby Stops",
-      "url": "/?action=nearby",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-    }
-  ]
-}
-
