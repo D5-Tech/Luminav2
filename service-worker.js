@@ -9,6 +9,7 @@ const urlsToCache = [
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/busStop/index.html'
+  '/busscrch/index.html'
 ];
 
 // Helper function to determine if a request should be cached
