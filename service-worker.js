@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'luminav-v2';
+const CACHE_NAME = 'luminav-v' + (new Date()).getTime();
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,6 +24,16 @@ const shouldCache = (url) => {
          url.includes('tile.openstreetmap.org') ||
          url.includes('unpkg.com/leaflet');
 };
+
+async function deleteOldCaches() {
+    const cacheNames = await caches.keys();
+    return Promise.all(
+        cacheNames
+            .filter(cacheName => cacheName.startsWith('luminav-'))
+            .filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => caches.delete(cacheName))
+    );
+}
 
 // Install Service Worker
 self.addEventListener('install', event => {
@@ -101,81 +111,13 @@ self.addEventListener('fetch', event => {
 });
 
 // Activate event - clean up old caches
+// Replace the existing activate event listener with:
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+      Promise.all([
+          deleteOldCaches(),
+          // Claim any clients immediately
+          self.clients.claim()
+      ])
   );
 });
-
-// manifest.json
-{
-  "name": "Luminav",
-  "short_name": "Luminav",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
-  "orientation": "any",
-  "display_override": ["window-controls-overlay"],
-  "icons": [
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Search Bus",
-      "url": "/?action=search",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Nearby Stops",
-      "url": "/?action=nearby",
-      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
-    }
-  ]
-}
-
-// index.html updates - Add these meta tags in the <head> section
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#4CAF50" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#388E3C" media="(prefers-color-scheme: dark)">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <title>Luminav</title>
-    
-    <!-- Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- App Resources -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-</head>

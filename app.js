@@ -658,12 +658,27 @@ function addSecurityHeaders() {
 }
 
 // Initialize everything when the page loads
-window.addEventListener('load', () => {
-    // Add security and CORS protection
-    addSecurityHeaders();
-    blockExternalScripts();
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister();
+        }
+    });
     
-    // Initialize the app
-    initMap();
-    setFallbackFavicon();
-});
+    // Register new service worker
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js', {
+            updateViaCache: 'none'
+        }).then(function(registration) {
+            registration.update();
+        });
+        
+        // Add security and CORS protection
+        addSecurityHeaders();
+        blockExternalScripts();
+        
+        // Initialize the app
+        initMap();
+        setFallbackFavicon();
+    });
+}
