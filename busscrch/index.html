@@ -325,50 +325,90 @@
                 }
             });
 
+
             locationButton.addEventListener('click', () => {
-                loadingSpinner.classList.add('active');
-                locationError.classList.remove('active');
+    loadingSpinner.classList.add('active');
+    locationError.classList.remove('active');
 
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const nearbyPlace = getNearbyPlace(position.coords);
-                            startInput.value = nearbyPlace;
-                            loadingSpinner.classList.remove('active');
-                        },
-                        (error) => {
-                            loadingSpinner.classList.remove('active');
-                            locationError.textContent = getErrorMessage(error);
-                            locationError.classList.add('active');
-                        },
-                        { 
-                            enableHighAccuracy: true,
-                            timeout: 10000,
-                            maximumAge: 0
-                        }
-                    );
-                } else {
+    // First, check if geolocation is supported
+    if (!navigator.geolocation) {
+        loadingSpinner.classList.remove('active');
+        locationError.textContent = "Location is not supported by your browser";
+        locationError.classList.add('active');
+        return;
+    }
+
+    // Request permission explicitly
+    navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+        if (permissionStatus.state === "denied") {
+            // If permission is denied, guide user to enable location
+            loadingSpinner.classList.remove('active');
+            locationError.textContent = "Please enable location in your browser settings";
+            locationError.classList.add('active');
+            // Try to show the permission prompt again
+            navigator.geolocation.getCurrentPosition(() => {}, () => {}, {});
+        } else {
+            // Request location with high accuracy
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const place = await getNearbyPlace(position.coords);
+                        startInput.value = place;
+                    } catch (error) {
+                        locationError.textContent = "Could not determine location name";
+                        locationError.classList.add('active');
+                    } finally {
+                        loadingSpinner.classList.remove('active');
+                    }
+                },
+                (error) => {
                     loadingSpinner.classList.remove('active');
-                    locationError.textContent = "Location is not supported by your browser";
+                    locationError.textContent = getErrorMessage(error);
                     locationError.classList.add('active');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
                 }
-            });
+            );
+        }
+    });
+});
 
-            function getNearbyPlace(coords) {
-                const places = [
-                    "Local Bus Stop",
-                    "City Center Bus Station",
-                    "Main Transport Hub",
-                    "Central Bus Terminal",
-                    "City Bus Stand",
-                    "Public Transport Station",
-                    "Bus Terminal",
-                    "Transit Center"
-                ];
-                
-                const randomIndex = Math.floor(Math.abs(Math.sin(coords.latitude + coords.longitude) * places.length));
-                return places[randomIndex];
-            }
+async function getNearbyPlace(coords) {
+    try {
+        // Use reverse geocoding to get actual location name
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`);
+        const data = await response.json();
+        
+        // Extract meaningful location name from the response
+        const address = data.address;
+        let locationName = '';
+        
+        // Try to get the most relevant name
+        if (address.road) {
+            locationName = address.road;
+            if (address.suburb) locationName += `, ${address.suburb}`;
+        } else if (address.suburb) {
+            locationName = address.suburb;
+        } else if (address.neighbourhood) {
+            locationName = address.neighbourhood;
+        } else {
+            locationName = data.display_name.split(',')[0];
+        }
+        
+        return locationName;
+    } catch (error) {
+        // Fallback to nearby bus stops if geocoding fails
+        const fallbackPlaces = [
+            "Nearest Bus Stop",
+            "Local Bus Station",
+            "Transport Hub"
+        ];
+        return fallbackPlaces[0]; // Return first fallback option
+    }
+}
 
             function getErrorMessage(error) {
                 switch(error.code) {
