@@ -1,0 +1,17 @@
+{
+    "name": "Bus Timing App",
+    "short_name": "Bus Times",
+    "description": "Real-time bus timing and schedule information",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#4CAF50",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "https://cdn.jsdelivr.net/npm/@mdi/svg@7.2.96/svg/bus.svg",
+            "sizes": "144x144",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ]
+}

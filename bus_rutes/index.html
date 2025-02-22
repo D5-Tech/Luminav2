@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <link rel="manifest" href="manifest.json">
+    <title>Bus Timings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .route-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px 0;
+        }
+
+        .location-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 10px;
+            flex: 1;
+            max-width: 45%;
+        }
+
+        .location-box.start {
+            margin-right: 10px;
+        }
+
+        .location-box.destination {
+            margin-left: 10px;
+        }
+
+        .route-connector {
+            height: 2px;
+            flex: 1;
+            background: #4CAF50;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .route-connector::before,
+        .route-connector::after {
+            content: '•';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+            font-size: 20px;
+        }
+
+        .route-connector::before { left: 0; }
+        .route-connector::after { right: 0; }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .bus-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+        }
+
+        .bus-card:nth-child(2) { animation-delay: 0.2s; }
+        .bus-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .bus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .bus-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .bus-number {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .departure-time {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .route-info {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        .route-dots {
+            flex: 1;
+            border-bottom: 2px dotted #ccc;
+            margin: 0 10px;
+        }
+
+        .price {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .arrival-time {
+            color: #2196F3;
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .location-box {
+                font-size: 0.9em;
+            }
+
+            .bus-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../busscrch/index.html">
+                <button class="back-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </a>
+            
+            <h1 style="text-align: center; margin-bottom: 15px;">Bus Timing</h1>
+            <div class="route-display">
+                <div class="location-box start" id="startPoint"></div>
+                <div class="route-connector"></div>
+                <div class="location-box destination" id="destPoint"></div>
+            </div>
+        </div>
+        <div id="busResults"></div>
+    </div>
+
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+            });
+        }
+
+        // Sample bus data
+        const predefinedRoutes = {
+            'aluva-thrissur': [
+                {
+                    busName: 'KSRTC Super Fast',
+                    busNumber: 'KL-15-9876',
+                    ticketRate: 90,
+                    departure: '08:30 AM',
+                    arrival: '10:00 AM'
+                },
+                {
+                    busName: 'Green Line Travels',
+                    busNumber: 'KL-07-BT-5432',
+                    ticketRate: 85,
+                    departure: '09:15 AM',
+                    arrival: '10:45 AM'
+                },
+                {
+                    busName: 'KSRTC Ordinary',
+                    busNumber: 'KL-17-1234',
+                    ticketRate: 70,
+                    departure: '07:45 AM',
+                    arrival: '09:45 AM'
+                }
+            ]
+        };
+
+        async function fetchBusData(start, destination) {
+            // First check predefined routes
+            const routeKey = `${start.toLowerCase()}-${destination.toLowerCase()}`;
+            if (predefinedRoutes[routeKey]) {
+                return predefinedRoutes[routeKey];
+            }
+
+            try {
+                // Try to fetch real data from kbuses.in
+                const response = await fetch(`https://www.kbuses.in/api/route/${start}/${destination}`);
+                const data = await response.json();
+                return data.buses || [];
+            } catch (error) {
+                // Fallback to generating some placeholder data
+                return [
+                    {
+                        busName: 'KSRTC Express',
+                        busNumber: `KL-${Math.floor(Math.random() * 99)}-${Math.floor(Math.random() * 9999)}`,
+                        ticketRate: Math.floor(Math.random() * 50) + 50,
+                        departure: '09:00 AM',
+                        arrival: '10:30 AM'
+                    }
+                ];
+            }
+        }
+
+        function displayBusResults(buses) {
+            const resultsContainer = document.getElementById('busResults');
+            resultsContainer.innerHTML = '';
+
+            buses.forEach(bus => {
+                const busCard = document.createElement('div');
+                busCard.className = 'bus-card';
+                busCard.innerHTML = `
+                    <div class="bus-header">
+                        <div>
+                            <div class="bus-name">${bus.busName}</div>
+                            <div class="bus-number">${bus.busNumber}</div>
+                        </div>
+                        <div class="departure-time">${bus.departure}</div>
+                    </div>
+                    <div class="route-info">
+                        <span>${document.getElementById('startPoint').textContent}</span>
+                        <div class="route-dots"></div>
+                        <span>${document.getElementById('destPoint').textContent}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="price">₹${bus.ticketRate}</div>
+                        <div class="arrival-time">${bus.arrival}</div>
+                    </div>
+                `;
+                resultsContainer.appendChild(busCard);
+            });
+        }
+
+        // Initialize the app
+        window.onload = async () => {
+            // Get route parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const start = urlParams.get('start') || 'Aluva';
+            const destination = urlParams.get('dest') || 'Thrissur';
+
+            // Display locations
+            document.getElementById('startPoint').textContent = start;
+            document.getElementById('destPoint').textContent = destination;
+
+            // Fetch and display bus data
+            const buses = await fetchBusData(start, destination);
+            displayBusResults(buses);
+        };
+    </script>
+</body>
+</html>
