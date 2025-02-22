@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bus-finder-v1';
+const CACHE_NAME = 'bus-finder-v2';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -15,14 +15,35 @@ self.addEventListener('install', event => {
 });
 
 // Fetch event handler
+// Fetch event handler
+// Fetch event handler
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                // Return cached version or fetch new
-                return response || fetch(event.request);
-            })
-    );
+    // Only cache same-origin requests
+    if (event.request.url.startsWith(self.location.origin)) {
+        event.respondWith(
+            caches.match(event.request)
+                .then(cachedResponse => {
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+                    return fetch(event.request)
+                        .then(response => {
+                            // Check if we received a valid response
+                            if (!response || response.status !== 200 || response.type !== 'basic') {
+                                return response;
+                            }
+
+                            const responseToCache = response.clone();
+                            caches.open(CACHE_NAME)
+                                .then(cache => {
+                                    cache.put(event.request, responseToCache);
+                                });
+
+                            return response;
+                        });
+                })
+        );
+    }
 });
 
 // Activate event handler - cleanup old caches
