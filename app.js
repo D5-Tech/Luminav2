@@ -546,12 +546,15 @@ function blockExternalScripts() {
 
 // PWA Installation Handler
 let deferredPrompt;
-const installButton = document.getElementById('installButton');
+const installPrompt = document.getElementById('installPrompt');
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installButton.style.display = 'block';
+    // Show the install prompt with animation
+    setTimeout(() => {
+        installPrompt.classList.add('visible');
+    }, 1000);
 });
 
 async function installPWA() {
@@ -559,10 +562,57 @@ async function installPWA() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to the install prompt: ${outcome}`);
+    if (outcome === 'accepted') {
+        showInstallationProgress();
+    }
     deferredPrompt = null;
-    installButton.style.display = 'none';
+    hideInstallPrompt();
 }
 
+function hideInstallPrompt() {
+    installPrompt.classList.remove('visible');
+}
+
+function showInstallationProgress() {
+    // Add a temporary success message
+    const successDiv = document.createElement('div');
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #4CAF50;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        z-index: 2000;
+        animation: fadeInOut 2s forwards;
+    `;
+    successDiv.innerHTML = `
+        <i class="fas fa-check-circle fa-3x"></i>
+        <h3 style="margin: 10px 0;">Installing Luminav</h3>
+        <p>Please wait...</p>
+    `;
+    document.body.appendChild(successDiv);
+
+    // Remove the message after animation
+    setTimeout(() => {
+        document.body.removeChild(successDiv);
+    }, 2000);
+}
+
+// Add this CSS for the installation progress animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translate(-50%, -30%); }
+        20% { opacity: 1; transform: translate(-50%, -50%); }
+        80% { opacity: 1; transform: translate(-50%, -50%); }
+        100% { opacity: 0; transform: translate(-50%, -70%); }
+    }
+`;
+document.head.appendChild(style);
 window.addEventListener('appinstalled', (e) => {
     console.log('PWA was installed');
     installButton.style.display = 'none';

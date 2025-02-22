@@ -138,10 +138,24 @@
     </div>
 
     <!-- Install Button -->
-    <div id="installButton" class="install-button" style="display: none;">
-        <button onclick="installPWA()">
-            <i class="fas fa-download"></i> Install App
-        </button>
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-prompt-header">
+            <div class="install-prompt-logo">
+                <i class="fas fa-bus fa-2x" style="color: #4CAF50;"></i>
+            </div>
+            <div class="install-prompt-title">
+                <h3>Install Luminav</h3>
+                <p>Developed by Linza and Devanarayanan A</p>
+            </div>
+        </div>
+        <div class="install-prompt-actions">
+            <button onclick="installPWA()" class="install-prompt-button primary">
+                Install Now
+            </button>
+            <button onclick="hideInstallPrompt()" class="install-prompt-button secondary">
+                Later
+            </button>
+        </div>
     </div>
 
     <script src="app.js"></script>
