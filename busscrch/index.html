@@ -330,7 +330,7 @@
     loadingSpinner.classList.add('active');
     locationError.classList.remove('active');
 
-    // Check if we can access location settings
+    // First, check if geolocation is supported
     if (!navigator.geolocation) {
         loadingSpinner.classList.remove('active');
         locationError.textContent = "Location is not supported by your browser";
@@ -338,43 +338,42 @@
         return;
     }
 
-    // On Android, this will trigger the system location prompt if location is off
-    if (window.Android && window.Android.checkLocationEnabled) {
-        window.Android.checkLocationEnabled();
-    }
-
-    // Request location with special options to trigger system location prompt
-    navigator.geolocation.getCurrentPosition(
-        async (position) => {
-            try {
-                const place = await getNearbyPlace(position.coords);
-                startInput.value = place;
-            } catch (error) {
-                locationError.textContent = "Could not determine location name";
-                locationError.classList.add('active');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        },
-        (error) => {
-            // If location service is disabled, this will trigger the system settings popup
-            if (error.code === error.POSITION_UNAVAILABLE) {
-                // For iOS
-                if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.toggleLocationSettings) {
-                    window.webkit.messageHandlers.toggleLocationSettings.postMessage("");
-                }
-            }
+    // Request permission explicitly
+    navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+        if (permissionStatus.state === "denied") {
+            // If permission is denied, guide user to enable location
             loadingSpinner.classList.remove('active');
-            locationError.textContent = getErrorMessage(error);
+            locationError.textContent = "Please enable location in your browser settings";
             locationError.classList.add('active');
-        },
-        {
-            enableHighAccuracy: true,  // This forces the GPS prompt
-            timeout: 30000,
-            maximumAge: 0,
-            forcePrompt: true  // Some browsers support this to force the system prompt
+            // Try to show the permission prompt again
+            navigator.geolocation.getCurrentPosition(() => {}, () => {}, {});
+        } else {
+            // Request location with high accuracy
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const place = await getNearbyPlace(position.coords);
+                        startInput.value = place;
+                    } catch (error) {
+                        locationError.textContent = "Could not determine location name";
+                        locationError.classList.add('active');
+                    } finally {
+                        loadingSpinner.classList.remove('active');
+                    }
+                },
+                (error) => {
+                    loadingSpinner.classList.remove('active');
+                    locationError.textContent = getErrorMessage(error);
+                    locationError.classList.add('active');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
         }
-    );
+    });
 });
 
 async function getNearbyPlace(coords) {
@@ -411,22 +410,18 @@ async function getNearbyPlace(coords) {
     }
 }
 
-function getErrorMessage(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            return "Please enable location access in settings";
-        case error.POSITION_UNAVAILABLE:
-            if (navigator.platform && /iPhone|iPad|iPod/.test(navigator.platform)) {
-                return "Please enable location services in your device settings";
-            } else {
-                return "Please turn on device location";
+            function getErrorMessage(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        return "Please allow location access";
+                    case error.POSITION_UNAVAILABLE:
+                        return "Location information unavailable";
+                    case error.TIMEOUT:
+                        return "Location request timed out";
+                    default:
+                        return "An unknown error occurred";
+                }
             }
-        case error.TIMEOUT:
-            return "Location request timed out";
-        default:
-            return "Please check if location is enabled";
-    }
-}
         });
     </script>
 </body>
