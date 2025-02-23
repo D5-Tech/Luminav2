@@ -568,6 +568,7 @@ body {
   .bottom-nav {
     padding: 6px 2px;
     min-height: 56px;
+    margin-bottom:50px;
   }
 
   .nav-item {
