@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transit App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <a href="#" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="route-info">
+                <h1>KSRTC Aluva-Thrissur Express</h1>
+                <div class="time-info">
+                    <span>9:10 AM</span>
+                    <span class="dots">• • • • •</span>
+                    <span>11:00AM</span>
+                </div>
+            </div>
+            <div class="header-icons">
+                <a href="#" class="people-count">
+                    <i class="fas fa-users"></i>
+                </a>
+                <a href="#" class="location-icon">
+                    <i class="fas fa-location-dot"></i>
+                </a>
+                <a href="#" class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="map-container">
+                <div id="map"></div>
+                <button id="locate-me" class="locate-button">
+                    <i class="fas fa-location-crosshairs"></i>
+                </button>
+            </div>
+
+            <div class="image-grid">
+                <div class="grid-item"><img src="" alt="Bus 1"></div>
+                <div class="grid-item"><img src="" alt="Bus 2"></div>
+                <div class="grid-item"><img src="" alt="Bus 3"></div>
+                <div class="grid-item"><img src="" alt="Bus 4"></div>
+            </div>
+
+            <div class="transport-cards">
+                <div class="card bus-card">
+                    <div class="card-header">
+                        <span>Next Bus: Green Line Travels (Private Bus)</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-dots"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>9:10 AM</span>
+                        <span>Rs. 33</span>
+                        <span>9:10 AM</span>
+                    </div>
+                </div>
+
+                <div class="card metro-card">
+                    <div class="card-header">
+                        <span>Next Metro: Blue Line</span>
+                        <span class="time-left">5min Left</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-dots"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>9:10 AM</span>
+                        <span>Rs. 40</span>
+                        <span>9:20 AM</span>
+                    </div>
+                </div>
+
+                <div class="card bike-card">
+                    <div class="card-header">
+                        <span>Next My Bike: Install My Bike App</span>
+                        <span class="phone">752728445</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-dots"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>9:10 AM</span>
+                        <span>Rs. 29</span>
+                        <span>9:10 AM</span>
+                    </div>
+                </div>
+
+                <div class="total-cost">
+                    Total cost: 176 Rs
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="notification-popup">
+        <div class="popup-content">
+            <p>No messages</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
