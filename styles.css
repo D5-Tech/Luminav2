@@ -938,10 +938,12 @@ body {
   }
 }
 /* No scroll below 980px */
+/* No scroll below 980px */
 @media screen and (max-width: 980px) {
   .app-container {
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
   }
 
   .features-grid {
@@ -954,8 +956,7 @@ body {
   }
 
   .map-container {
-    height: calc(100vh - 450px);
-    max-height: 250px;
+    height: 250px;
   }
 
   .header {
@@ -964,6 +965,22 @@ body {
 
   .search-container {
     margin-bottom: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .app-container {
+    height: auto;
+    padding-bottom: var(--bottom-nav-height);
+  }
+  
+  .map-container {
+    height: 200px;
+    margin-bottom: 0;
+  }
+  
+  .current-location {
+    margin-bottom: 0;
   }
 }
 
