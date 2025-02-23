@@ -939,24 +939,31 @@ body {
 }
 /* No scroll below 980px */
 /* No scroll below 980px */
+/* Mobile responsive adjustments */
 @media screen and (max-width: 980px) {
   .app-container {
-    min-height: 100vh;
     height: auto;
-    overflow-y: auto;
+    min-height: calc(100% - var(--bottom-nav-height));
+    padding-bottom: 0;
   }
 
   .features-grid {
-    max-height: 100px;
+    max-height: none;
+    margin-bottom: 16px;
   }
 
   .nearby-stops {
-    max-height: 180px;
-    overflow-y: auto;
+    max-height: none;
+    margin-bottom: 16px;
   }
 
   .map-container {
-    height: 250px;
+    height: 200px;
+    margin-bottom: 0;
+  }
+
+  .current-location {
+    margin-bottom: 70px;
   }
 
   .header {
@@ -965,6 +972,25 @@ body {
 
   .search-container {
     margin-bottom: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .app-container {
+    padding: 12px;
+    padding-bottom: 0;
+  }
+  
+  .features-grid {
+    gap: 12px;
+  }
+  
+  .map-container {
+    height: 180px;
+  }
+  
+  .nearby-stops {
+    margin-bottom: 12px;
   }
 }
 
