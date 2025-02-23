@@ -10,7 +10,66 @@
   --backdrop-blur: blur(12px);
 }
 
+:root {
+  /* Existing variables */
+  --primary-color: #4CAF50;
+  --primary-light: #81C784;
+  --primary-dark: #388E3C;
+  --gradient-start: #4CAF50;
+  --gradient-end: rgba(255, 255, 255, 0.9);
+  --border-radius: 16px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --backdrop-blur: blur(12px);
+  
+  /* New responsive variables */
+  --vh: 1vh;
+  --header-height: min(10vh, 80px);
+  --nav-height: min(8vh, 70px);
+  --map-height: min(35vh, 300px);
+  --content-spacing: min(3vh, 24px);
+  --font-scale: clamp(0.875, 1vw, 1);
+}
 
+/* Add this right after the body styles */
+.app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: calc(var(--content-spacing) / 2);
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+}
+
+/* Update the content sections to use flex */
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: calc(var(--content-spacing) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-spacing);
+}
+
+/* Update map container height */
+.map-container {
+  height: var(--map-height);
+  margin-bottom: var(--nav-height);
+}
+
+/* Update header height */
+.header {
+  height: var(--header-height);
+  margin-bottom: var(--content-spacing);
+}
+
+/* Update bottom nav height */
+.bottom-nav {
+  height: var(--nav-height);
+  padding: calc(var(--content-spacing) / 2);
+}
 
 
 
@@ -120,24 +179,11 @@
   box-sizing: border-box;
 }
 
-/* REPLACE THESE STYLES */
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-/* ADD THIS TO YOUR IMAGE STYLES */
-img {
-  max-width: 100%;
-  height: auto;
-}
-.container {
-  max-width: 100%;
-  padding: 15px;
-  margin: 0 auto;
-  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  min-height: 100vh;
+  color: #333;
 }
 
 .app-container {
@@ -683,23 +729,5 @@ img {
   .feature-box:active,
   .stop-card:active {
       transform: scale(0.98);
-  }
-}
-
-/* ADD THESE AT END OF CSS */
-@media (max-width: 480px) {
-  .button-class { /* Replace with your actual button class */
-      padding: 12px 10px;
-      font-size: 14px;
-  }
-  
-  .input-class { /* Replace with your actual input class */
-      font-size: 14px;
-  }
-}
-
-@media (max-width: 320px) {
-  .container {
-      padding: 10px;
   }
 }

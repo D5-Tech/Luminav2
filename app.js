@@ -12,7 +12,15 @@ const setFallbackFavicon = () => {
     link.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB9UlEQVR4AWJwL/ABtGdmZjpAxX+g4XBzczENDQ0MDAwM/4GB/v7+/9HR0f/FxcX/xcXF/7m5uf+pqan/qamp/9nZ2f+5ubn/xcXF/8XFxf/R0dH/0dHR/wMDA/8DAwP/gYGB/4GB';
     document.getElementsByTagName('head')[0].appendChild(link);
 };
-
+// Add this at the start of app.js
+function setViewportHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+  
+  // Run on load and resize
+  window.addEventListener('load', setViewportHeight);
+  window.addEventListener('resize', setViewportHeight);
 // Create a safe fetch wrapper to handle CORS issues
 const safeFetch = async (url, options = {}) => {
     try {
