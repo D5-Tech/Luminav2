@@ -26,6 +26,40 @@ const aluva = L.marker([10.1004, 76.3571], { icon: busStopIcon })
 const thrissur = L.marker([10.5276, 76.2144], { icon: busStopIcon })
     .bindPopup('<b>Thrissur Bus Station</b><br>Destination<br>Arrival: 11:00 AM')
     .addTo(map);
+    // Image modal functionality
+const modal = document.getElementById('imageModal');
+const viewAll = document.querySelector('.view-all');
+const closeModal = document.querySelector('.close-modal');
+const imagePreview = document.querySelector('.image-preview');
+
+viewAll.addEventListener('click', () => {
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+});
+
+imagePreview.addEventListener('click', () => {
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+});
+
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
+
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+});
 
 // Add intermediate stops
 const intermediateStops = [

@@ -42,22 +42,32 @@
                     <i class="fas fa-location-crosshairs"></i>
                 </button>
             </div>
-
-            <div class="image-grid">
-                <div class="grid-item">
+            
+            <div class="image-collection">
+                <div class="collection-header">
+                    <span>Bus Images</span>
+                    <span class="view-all">View all</span>
+                </div>
+                <div class="image-preview">
                     <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=800&auto=format&fit=crop&q=60" alt="Bus 1">
-                </div>
-                <div class="grid-item">
                     <img src="https://images.unsplash.com/photo-1608825090252-a2e75ac2d06c?w=800&auto=format&fit=crop&q=60" alt="Bus 2">
-                </div>
-                <div class="grid-item">
                     <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=800&auto=format&fit=crop&q=60" alt="Bus 3">
-                </div>
-                <div class="grid-item">
                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=60" alt="Bus 4">
                 </div>
             </div>
-
+            
+            <!-- Add this at the end of body tag -->
+            <div class="modal" id="imageModal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <div class="modal-images">
+                        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=800&auto=format&fit=crop&q=60" alt="Bus 1">
+                        <img src="https://images.unsplash.com/photo-1608825090252-a2e75ac2d06c?w=800&auto=format&fit=crop&q=60" alt="Bus 2">
+                        <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=800&auto=format&fit=crop&q=60" alt="Bus 3">
+                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=60" alt="Bus 4">
+                    </div>
+                </div>
+            </div>
             <div class="transport-cards">
                 <div class="card">
                     <div class="card-header">
