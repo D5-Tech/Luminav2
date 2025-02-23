@@ -10,66 +10,7 @@
   --backdrop-blur: blur(12px);
 }
 
-:root {
-  /* Existing variables */
-  --primary-color: #4CAF50;
-  --primary-light: #81C784;
-  --primary-dark: #388E3C;
-  --gradient-start: #4CAF50;
-  --gradient-end: rgba(255, 255, 255, 0.9);
-  --border-radius: 16px;
-  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --backdrop-blur: blur(12px);
-  
-  /* New responsive variables */
-  --vh: 1vh;
-  --header-height: min(10vh, 80px);
-  --nav-height: min(8vh, 70px);
-  --map-height: min(35vh, 300px);
-  --content-spacing: min(3vh, 24px);
-  --font-scale: clamp(0.875, 1vw, 1);
-}
 
-/* Add this right after the body styles */
-.app-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: calc(var(--content-spacing) / 2);
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-}
-
-/* Update the content sections to use flex */
-.content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  padding: calc(var(--content-spacing) / 2);
-  display: flex;
-  flex-direction: column;
-  gap: var(--content-spacing);
-}
-
-/* Update map container height */
-.map-container {
-  height: var(--map-height);
-  margin-bottom: var(--nav-height);
-}
-
-/* Update header height */
-.header {
-  height: var(--header-height);
-  margin-bottom: var(--content-spacing);
-}
-
-/* Update bottom nav height */
-.bottom-nav {
-  height: var(--nav-height);
-  padding: calc(var(--content-spacing) / 2);
-}
 
 
 
@@ -448,32 +389,43 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: var(--backdrop-blur);
   display: flex;
-  justify-content: space-around;
-  padding: 12px 8px;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 8px 4px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  min-height: 64px;
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
   color: #666;
   font-size: 12px;
   font-weight: 500;
-  padding: 8px;
-  border-radius: 12px;
+  padding: 6px;
+  width: 20%;
+  min-width: 56px;
+  max-width: 80px;
+  border-radius: 8px;
   transition: all 0.2s ease;
+  gap: 4px;
 }
 
 .nav-item.active {
   color: var(--primary-color);
   background: rgba(76, 175, 80, 0.1);
 }
-
+.nav-item i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
 .nav-item img {
   width: 24px;
   height: 24px;
@@ -484,7 +436,14 @@ body {
 .nav-item.active img {
   opacity: 1;
 }
-
+.nav-item span {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 1.2;
+}
 /* Search Overlay */
 .search-overlay {
   position: fixed;
@@ -605,7 +564,57 @@ body {
 .stop-info h3 {
   font-size: clamp(14px, 3.5vw, 16px);
 }
+@media screen and (max-width: 320px) {
+  .bottom-nav {
+    padding: 6px 2px;
+    min-height: 56px;
+  }
 
+  .nav-item {
+    font-size: 10px;
+    padding: 4px;
+    min-width: 48px;
+  }
+
+  .nav-item i {
+    font-size: 18px;
+  }
+}
+
+@media screen and (min-width: 321px) and (max-width: 375px) {
+  .bottom-nav {
+    padding: 8px 4px;
+  }
+
+  .nav-item {
+    padding: 5px;
+  }
+}
+
+/* Safe area insets for modern phones */
+@supports (padding: max(0px)) {
+  .bottom-nav {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    height: max(64px, calc(64px + env(safe-area-inset-bottom)));
+  }
+}
+
+/* Landscape mode optimization */
+@media screen and (orientation: landscape) {
+  .bottom-nav {
+    min-height: 56px;
+  }
+  
+  .nav-item {
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+  }
+  
+  .nav-item i {
+    margin-bottom: 0;
+  }
+}
 /* Enhanced Mobile Responsive Rules */
 @media screen and (max-width: 320px) {
   .app-container {
