@@ -566,9 +566,9 @@ body {
 }
 @media screen and (max-width: 320px) {
   .bottom-nav {
-    padding: 6px 2px;
+    padding: 6px 50px;
     min-height: 56px;
-    margin-bottom:50px;
+    /* margin-bottom:50px; */
   }
 
   .nav-item {
