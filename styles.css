@@ -120,11 +120,24 @@
   box-sizing: border-box;
 }
 
+/* REPLACE THESE STYLES */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  min-height: 100vh;
-  color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+/* ADD THIS TO YOUR IMAGE STYLES */
+img {
+  max-width: 100%;
+  height: auto;
+}
+.container {
+  max-width: 100%;
+  padding: 15px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .app-container {
@@ -670,5 +683,23 @@ body {
   .feature-box:active,
   .stop-card:active {
       transform: scale(0.98);
+  }
+}
+
+/* ADD THESE AT END OF CSS */
+@media (max-width: 480px) {
+  .button-class { /* Replace with your actual button class */
+      padding: 12px 10px;
+      font-size: 14px;
+  }
+  
+  .input-class { /* Replace with your actual input class */
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+      padding: 10px;
   }
 }
