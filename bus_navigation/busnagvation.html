@@ -19,17 +19,17 @@
                 <div class="time-info">
                     <span>9:10 AM</span>
                     <span class="dots">• • • • •</span>
-                    <span>11:00AM</span>
+                    <span>11:00 AM</span>
                 </div>
             </div>
             <div class="header-icons">
-                <a href="#" class="people-count">
+                <a href="#" class="icon">
                     <i class="fas fa-users"></i>
                 </a>
-                <a href="#" class="location-icon">
+                <a href="#" class="icon">
                     <i class="fas fa-location-dot"></i>
                 </a>
-                <a href="#" class="notification-bell">
+                <a href="#" class="icon">
                     <i class="fas fa-bell"></i>
                 </a>
             </div>
@@ -38,20 +38,28 @@
         <main>
             <div class="map-container">
                 <div id="map"></div>
-                <button id="locate-me" class="locate-button">
+                <button class="locate-btn">
                     <i class="fas fa-location-crosshairs"></i>
                 </button>
             </div>
 
             <div class="image-grid">
-                <div class="grid-item"><img src="" alt="Bus 1"></div>
-                <div class="grid-item"><img src="" alt="Bus 2"></div>
-                <div class="grid-item"><img src="" alt="Bus 3"></div>
-                <div class="grid-item"><img src="" alt="Bus 4"></div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=800&auto=format&fit=crop&q=60" alt="Bus 1">
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1608825090252-a2e75ac2d06c?w=800&auto=format&fit=crop&q=60" alt="Bus 2">
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=800&auto=format&fit=crop&q=60" alt="Bus 3">
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=60" alt="Bus 4">
+                </div>
             </div>
 
             <div class="transport-cards">
-                <div class="card bus-card">
+                <div class="card">
                     <div class="card-header">
                         <span>Next Bus: Green Line Travels (Private Bus)</span>
                     </div>
@@ -65,7 +73,7 @@
                     </div>
                 </div>
 
-                <div class="card metro-card">
+                <div class="card">
                     <div class="card-header">
                         <span>Next Metro: Blue Line</span>
                         <span class="time-left">5min Left</span>
@@ -80,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="card bike-card">
+                <div class="card">
                     <div class="card-header">
                         <span>Next My Bike: Install My Bike App</span>
                         <span class="phone">752728445</span>
@@ -100,12 +108,6 @@
                 </div>
             </div>
         </main>
-    </div>
-
-    <div class="notification-popup">
-        <div class="popup-content">
-            <p>No messages</p>
-        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

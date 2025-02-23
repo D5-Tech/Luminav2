@@ -1,154 +1,118 @@
-// Initialize map
-const map = L.map('map').setView([10.8505, 76.2711], 13); // Default view centered on Kerala
+// Initialize the map
+const map = L.map('map').setView([10.1632, 76.6413], 13); // Coordinates for Aluva-Thrissur route
 
+// Add OpenStreetMap tiles with better styling
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    minZoom: 8,
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-let userMarker = null;
-let userCircle = null;
-
-// Locate button functionality
-document.getElementById('locate-me').addEventListener('click', () => {
-    map.locate({setView: true, maxZoom: 16});
+// Custom icon for bus stops
+const busStopIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
 });
 
-// Handle location found
+// Add markers for Aluva and Thrissur with custom icons and popups
+const aluva = L.marker([10.1004, 76.3571], { icon: busStopIcon })
+    .bindPopup('<b>Aluva Bus Station</b><br>Starting Point<br>Departure: 9:10 AM')
+    .addTo(map);
+
+const thrissur = L.marker([10.5276, 76.2144], { icon: busStopIcon })
+    .bindPopup('<b>Thrissur Bus Station</b><br>Destination<br>Arrival: 11:00 AM')
+    .addTo(map);
+
+// Add intermediate stops
+const intermediateStops = [
+    { coords: [10.2558, 76.2845], name: 'Angamaly', time: '9:35 AM' },
+    { coords: [10.3389, 76.2150], name: 'Chalakudy', time: '10:15 AM' },
+];
+
+intermediateStops.forEach(stop => {
+    L.marker(stop.coords, { icon: busStopIcon })
+        .bindPopup(`<b>${stop.name} Bus Stop</b><br>Expected Time: ${stop.time}`)
+        .addTo(map);
+});
+
+// Draw route line with animation
+const routePoints = [
+    [10.1004, 76.3571], // Aluva
+    ...intermediateStops.map(stop => stop.coords),
+    [10.5276, 76.2144]  // Thrissur
+];
+
+const routeLine = L.polyline(routePoints, {
+    color: '#2196F3',
+    weight: 4,
+    opacity: 0.8,
+    lineCap: 'round',
+    lineJoin: 'round',
+    dashArray: '10, 10',
+    dashOffset: '0'
+}).addTo(map);
+
+// Animate the route line
+let offset = 0;
+function animateLine() {
+    offset = (offset - 1) % 20;
+    routeLine.setStyle({ dashOffset: offset.toString() });
+    requestAnimationFrame(animateLine);
+}
+animateLine();
+
+// Fit map to show the entire route with padding
+map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+
+// User location handling
+let userMarker = null;
+let userAccuracyCircle = null;
+
+// Handle locate button click
+document.querySelector('.locate-btn').addEventListener('click', () => {
+    map.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
+});
+
+// Handle location found event
 map.on('locationfound', (e) => {
-    const radius = e.accuracy / 2;
+    // Remove existing user location markers
+    if (userMarker) map.removeLayer(userMarker);
+    if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
 
-    // Remove existing marker and circle
-    if (userMarker) {
-        map.removeLayer(userMarker);
-    }
-    if (userCircle) {
-        map.removeLayer(userCircle);
-    }
-
-    // Add new marker and circle
-    userMarker = L.marker(e.latlng).addTo(map)
-        .bindPopup("You are here").openPopup();
-
-    userCircle = L.circle(e.latlng, {
+    // Add accuracy circle
+    userAccuracyCircle = L.circle(e.latlng, {
+        radius: e.accuracy / 2,
         color: '#4CAF50',
         fillColor: '#4CAF50',
-        fillOpacity: 0.2,
-        radius: radius
+        fillOpacity: 0.15,
+        weight: 2
     }).addTo(map);
+
+    // Add user marker
+    userMarker = L.marker(e.latlng, {
+        icon: L.divIcon({
+            className: 'user-marker',
+            html: '<div style="background-color: #4CAF50; border: 2px solid white; border-radius: 50%; width: 12px; height: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>'
+        })
+    }).addTo(map)
+        .bindPopup('You are here')
+        .openPopup();
 });
 
 // Handle location error
 map.on('locationerror', (e) => {
-    alert("Could not find your location. Please check your settings and try again.");
+    alert('Unable to find your location. Please check your device settings and try again.');
 });
 
-// Notification bell functionality
-const notificationBell = document.querySelector('.notification-bell');
-const notificationPopup = document.querySelector('.notification-popup');
-let popupTimeout;
+// Add scale control
+L.control.scale({
+    imperial: false,
+    position: 'bottomright'
+}).addTo(map);
 
-notificationBell.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    // Show popup
-    notificationPopup.classList.add('show');
-    
-    // Clear existing timeout
-    if (popupTimeout) {
-        clearTimeout(popupTimeout);
-    }
-    
-    // Hide popup after 3 seconds
-    popupTimeout = setTimeout(() => {
-        notificationPopup.classList.remove('show');
-    }, 3000);
-});
-
-// Create overlay for expanded images
-const overlay = document.createElement('div');
-overlay.className = 'overlay';
-document.body.appendChild(overlay);
-
-// Image grid functionality with click to expand
-const gridItems = document.querySelectorAll('.grid-item');
-gridItems.forEach(item => {
-    // Create close button for each grid item
-    const closeButton = document.createElement('button');
-    closeButton.className = 'close-button';
-    closeButton.innerHTML = '<i class="fas fa-times"></i>';
-    item.appendChild(closeButton);
-
-    const img = item.querySelector('img');
-    
-    // Add loading animation
-    img.addEventListener('load', () => {
-        item.style.animation = 'slideIn 0.5s ease forwards';
-    });
-    
-    // Add error handling
-    img.addEventListener('error', () => {
-        item.style.backgroundColor = '#f0f0f0';
-        item.innerHTML = '<div style="padding: 20px; text-align: center;">Image not available</div>';
-    });
-
-    // Add click to expand functionality
-    item.addEventListener('click', (e) => {
-        if (!e.target.closest('.close-button')) {
-            item.classList.add('expanded');
-            overlay.classList.add('active');
-        }
-    });
-
-    // Close button functionality
-    closeButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        item.classList.remove('expanded');
-        overlay.classList.remove('active');
-    });
-});
-
-// Close expanded image when clicking overlay
-overlay.addEventListener('click', () => {
-    const expandedItem = document.querySelector('.grid-item.expanded');
-    if (expandedItem) {
-        expandedItem.classList.remove('expanded');
-        overlay.classList.remove('active');
-    }
-});
-
-// Add escape key functionality to close expanded image
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        const expandedItem = document.querySelector('.grid-item.expanded');
-        if (expandedItem) {
-            expandedItem.classList.remove('expanded');
-            overlay.classList.remove('active');
-        }
-    }
-});
-
-// Add smooth scroll behavior for links with hash
-document.querySelectorAll('a[href*="#"]:not([href="#"])').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href').split('#')[1];
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Add card hover effects
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-5px)';
-        card.style.transition = 'transform 0.3s ease';
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0)';
-    });
-});
+// Add zoom controls
+map.zoomControl.setPosition('bottomright');
