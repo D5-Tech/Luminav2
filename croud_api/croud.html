@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Crowd Level Monitor</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007BFF">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .back-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+        
+        .back-nav a {
+            display: flex;
+            align-items: center;
+            color: #333;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-nav a:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .back-nav i {
+            margin-right: 5px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            padding-top: 15px;
+        }
+        
+        .crowd-level {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #007BFF;
+            margin: 20px 0;
+        }
+        
+        .status {
+            font-size: 1.5rem;
+            margin: 15px auto;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            color: white;
+            min-width: 120px;
+        }
+        
+        .last-updated {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .low { background-color: #28a745; }
+        .medium { background-color: #fd7e14; }
+        .high { background-color: #dc3545; }
+        
+        .refresh-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1280px) {
+            .container {
+                max-width: 450px;
+            }
+        }
+        
+        @media (max-width: 980px) {
+            .container {
+                max-width: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                max-width: 350px;
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .crowd-level {
+                font-size: 2.5rem;
+            }
+            
+            .status {
+                font-size: 1.3rem;
+            }
+            
+            .back-nav {
+                top: 15px;
+                left: 15px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+                padding-top: 20px;
+            }
+            
+            .crowd-level {
+                font-size: 2rem;
+            }
+            
+            .status {
+                font-size: 1.1rem;
+                padding: 10px;
+            }
+            
+            .back-nav a {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+            
+            .crowd-level {
+                font-size: 1.8rem;
+                margin: 15px 0;
+            }
+            
+            .status {
+                min-width: 100px;
+            }
+            
+            .refresh-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .back-nav {
+                top: 10px;
+                left: 10px;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .container {
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.2rem;
+                padding-top: 25px;
+            }
+            
+            .crowd-level {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <h1>Bus Crowd Level</h1>
+        <p class="crowd-level" id="crowdLevel">Loading...</p>
+        <p class="status" id="status">Fetching...</p>
+        <p class="last-updated" id="lastUpdated"></p>
+        <button class="refresh-btn" id="refreshButton">Refresh Data</button>
+    </div>
+
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+        
+        async function fetchCrowdData() {
+            try {
+                document.getElementById('crowdLevel').textContent = 'Loading...';
+                document.getElementById('status').textContent = 'Fetching...';
+                document.getElementById('status').className = 'status';
+                
+                let response = await fetch('https://api.thingspeak.com/channels/2853823/fields/1.json?api_key=V7AA3PVA4X6G3QQ0&results=1');
+                let data = await response.json();
+                let feeds = data.feeds;
+                
+                if (feeds.length > 0) {
+                    let value = parseInt(feeds[0].field1);
+                    let timestamp = new Date(feeds[0].created_at);
+                    
+                    document.getElementById('crowdLevel').textContent = value;
+                    document.getElementById('lastUpdated').textContent = `Last updated: ${timestamp.toLocaleString()}`;
+                    
+                    let statusElement = document.getElementById('status');
+                    
+                    if (value <= 1) {
+                        statusElement.textContent = 'Low';
+                        statusElement.className = 'status low';
+                    } else if (value <= 3) {
+                        statusElement.textContent = 'Medium';
+                        statusElement.className = 'status medium';
+                    } else {
+                        statusElement.textContent = 'High';
+                        statusElement.className = 'status high';
+                    }
+                    
+                    // Store data for offline use
+                    if ('caches' in window) {
+                        const cache = await caches.open('bus-crowd-data');
+                        await cache.put('crowd-data', new Response(JSON.stringify({
+                            value: value,
+                            status: statusElement.textContent,
+                            statusClass: statusElement.className.replace('status ', ''),
+                            lastUpdated: timestamp.toLocaleString()
+                        })));
+                    }
+                } else {
+                    document.getElementById('crowdLevel').textContent = 'No Data';
+                    document.getElementById('status').textContent = 'Unknown';
+                    document.getElementById('lastUpdated').textContent = '';
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('crowdLevel').textContent = 'Error fetching data';
+                document.getElementById('status').textContent = 'Error';
+                
+                // Try to get cached data when offline
+                if ('caches' in window) {
+                    try {
+                        const cache = await caches.open('bus-crowd-data');
+                        const cachedResponse = await cache.match('crowd-data');
+                        
+                        if (cachedResponse) {
+                            const cachedData = await cachedResponse.json();
+                            document.getElementById('crowdLevel').textContent = cachedData.value;
+                            document.getElementById('status').textContent = cachedData.status;
+                            document.getElementById('status').className = 'status ' + cachedData.statusClass;
+                            document.getElementById('lastUpdated').textContent = `Last updated: ${cachedData.lastUpdated} (offline)`;
+                        }
+                    } catch (cacheError) {
+                        console.error('Error retrieving cached data:', cacheError);
+                    }
+                }
+            }
+        }
+        
+        // Set up auto-refresh and manual refresh
+        let refreshInterval = setInterval(fetchCrowdData, 30000); // Refresh every 30 seconds
+        
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            fetchCrowdData();
+        });
+        
+        // Initial data fetch
+        fetchCrowdData();
+    </script>
+</body>
+</html>
