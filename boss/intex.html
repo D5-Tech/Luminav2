@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movement Tracker Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .main-container {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 280px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+        .map-container {
+            flex: 1;
+            padding: 15px;
+        }
+        #map {
+            width: 100%;
+            height: calc(100vh - 100px);
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .client-item {
+            padding: 12px;
+            background-color: white;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .client-item:hover {
+            background-color: #e9f7fe;
+        }
+        .client-item.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-active {
+            background-color: #2ecc71;
+        }
+        .status-inactive {
+            background-color: #e74c3c;
+        }
+        .client-name {
+            font-weight: bold;
+        }
+        .client-details {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        .active .client-details {
+            color: #ecf0f1;
+        }
+        .controls {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .stats-panel {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .stat-value {
+            font-weight: bold;
+        }
+        #demo-options {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+        /* Base responsive rules for all screen sizes */
+@media screen and (max-width: 1280px) {
+    h1 {
+        font-size: 22px;
+    }
+    
+    .sidebar {
+        width: 250px;
+    }
+}
+
+/* Medium screens - 980px */
+@media screen and (max-width: 980px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        order: 2;
+    }
+    
+    .map-container {
+        order: 1;
+    }
+    
+    #map {
+        height: 50vh;
+    }
+    
+    .stats-panel {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .stat-item {
+        width: 48%;
+    }
+}
+
+/* Tablets - 768px */
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #connection-status {
+        margin-top: 5px;
+    }
+    
+    #map {
+        height: 45vh;
+    }
+    
+    .controls {
+        flex-wrap: wrap;
+    }
+    
+    .controls button {
+        margin-bottom: 8px;
+    }
+}
+
+/* Small tablets - 640px */
+@media screen and (max-width: 640px) {
+    .stat-item {
+        width: 100%;
+    }
+    
+    #client-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .client-item {
+        width: calc(50% - 10px);
+        box-sizing: border-box;
+        margin-bottom: 0;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .controls button {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+}
+
+/* Phones - 480px */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+    }
+    
+    h2, h3 {
+        font-size: 16px;
+    }
+    
+    #map {
+        height: 40vh;
+    }
+    
+    .client-item {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .stats-panel {
+        padding: 10px;
+    }
+    
+    #demo-options {
+        padding: 10px;
+    }
+    
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Small phones - 360px */
+@media screen and (max-width: 360px) {
+    header {
+        padding: 10px;
+    }
+    
+    .map-container, .sidebar {
+        padding: 10px;
+    }
+    
+    #map {
+        height: 35vh;
+    }
+    
+    .client-details {
+        font-size: 11px;
+    }
+}
+
+/* Extra small phones - 320px */
+@media screen and (max-width: 320px) {
+    h1 {
+        font-size: 16px;
+    }
+    
+    .stat-item {
+        font-size: 12px;
+    }
+    
+    #map {
+        height: 30vh;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Movement Tracker Dashboard</h1>
+        <div id="connection-status">Status: Monitoring</div>
+    </header>
+    
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>Active Clients</h2>
+            <div id="client-list">
+                <!-- Client list will be populated here -->
+            </div>
+            
+            <div class="stats-panel">
+                <h3>Selected Client Stats</h3>
+                <div class="stat-item">
+                    <span>Current Speed:</span>
+                    <span id="current-speed" class="stat-value">0 km/h</span>
+                </div>
+                <div class="stat-item">
+                    <span>Distance Covered:</span>
+                    <span id="distance-covered" class="stat-value">0 km</span>
+                </div>
+                <div class="stat-item">
+                    <span>Duration:</span>
+                    <span id="duration" class="stat-value">00:00:00</span>
+                </div>
+                <div class="stat-item">
+                    <span>Last Update:</span>
+                    <span id="last-update" class="stat-value">-</span>
+                </div>
+            </div>
+            
+            <!-- Demo Options for testing -->
+            <div id="demo-options">
+                <h3>Demo Options</h3>
+                <button id="load-demo-data">Load Demo Route</button>
+                <button id="simulate-movement">Simulate Movement</button>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="controls">
+                <button id="refresh-data">Refresh Data</button>
+                <button id="toggle-path">Show Path</button>
+                <button id="center-map">Center Map</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// Variables
+let map;
+let markers = {};
+let paths = {};
+let selectedClientId = null;
+let simulationInterval = null;
+let demoPositionIndex = 0;
+let pathsVisible = true;
+
+// Demo data - simulated client movement
+const demoData = {
+    clientId: 'demo-client',
+    positions: [
+        { lat: 40.7128, lng: -74.0060, timestamp: Date.now() - 3600000, accuracy: 10 }, // NYC
+        { lat: 40.7138, lng: -74.0050, timestamp: Date.now() - 3500000, accuracy: 8 },
+        { lat: 40.7148, lng: -74.0045, timestamp: Date.now() - 3400000, accuracy: 5 },
+        { lat: 40.7158, lng: -74.0040, timestamp: Date.now() - 3300000, accuracy: 6 },
+        { lat: 40.7168, lng: -74.0035, timestamp: Date.now() - 3200000, accuracy: 4 },
+        { lat: 40.7178, lng: -74.0030, timestamp: Date.now() - 3100000, accuracy: 5 },
+        { lat: 40.7188, lng: -74.0025, timestamp: Date.now() - 3000000, accuracy: 7 },
+        { lat: 40.7198, lng: -74.0020, timestamp: Date.now() - 2900000, accuracy: 9 },
+        { lat: 40.7208, lng: -74.0015, timestamp: Date.now() - 2800000, accuracy: 8 },
+        { lat: 40.7218, lng: -74.0010, timestamp: Date.now() - 2700000, accuracy: 6 }
+    ]
+};
+
+// Custom bus icon creation function
+function createBusIcon(color, borderColor) {
+    return L.divIcon({
+        className: 'custom-bus-icon-wrapper',
+        html: `
+            <div class="custom-bus-icon" style="
+                width: 36px; 
+                height: 36px; 
+                background-color: ${color}; 
+                border: 2px solid ${borderColor}; 
+                border-radius: 8px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                </svg>
+            </div>
+        `,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+        popupAnchor: [0, -18]
+    });
+}
+
+// Define icon styles for different clients
+const iconStyles = {
+    'demo-client': {
+        color: '#E53935',       // Red
+        borderColor: '#B71C1C'  // Dark red
+    },
+    'simulated-client': {
+        color: '#1E88E5',       // Blue
+        borderColor: '#0D47A1'  // Dark blue
+    },
+    'default': {
+        color: '#43A047',       // Green
+        borderColor: '#1B5E20'  // Dark green
+    }
+};
+
+// Function to initialize the map
+function initializeMap() {
+    map = L.map('map').setView([40.7128, -74.0060], 13); // Default to NYC
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+}
+
+// Function to load Leaflet library dynamically
+function loadLeaflet() {
+    return new Promise((resolve, reject) => {
+        // Load CSS
+        const cssLink = document.createElement('link');
+        cssLink.rel = 'stylesheet';
+        cssLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css';
+        document.head.appendChild(cssLink);
+        
+        // Load JS
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js';
+        script.onload = () => {
+            initializeMap();
+            resolve();
+        };
+        script.onerror = () => reject(new Error('Failed to load Leaflet'));
+        document.head.appendChild(script);
+    });
+}
+
+// Function to refresh client data
+function refreshData() {
+    // In a real application, this would fetch data from your server
+    // For this demo, we'll read from localStorage
+    try {
+        const realtimePosition = JSON.parse(localStorage.getItem('realtimePosition') || '[]');
+        const movementData = JSON.parse(localStorage.getItem('movementData') || '{}');
+        
+        updateClientsDisplay(realtimePosition, movementData);
+    } catch (error) {
+        console.error('Error loading client data:', error);
+    }
+}
+
+// Function to update clients display
+function updateClientsDisplay(realtimePositions, movementData) {
+    const clientList = document.getElementById('client-list');
+    
+    // Create a set of unique client IDs
+    const clientIds = new Set();
+    
+    // Add IDs from realtime positions
+    realtimePositions.forEach(pos => {
+        if (pos.clientId) clientIds.add(pos.clientId);
+    });
+    
+    // Add IDs from movement data
+    if (movementData.clientId) clientIds.add(movementData.clientId);
+    
+    // Always add demo client
+    clientIds.add('demo-client');
+    
+    // Generate client items
+    clientList.innerHTML = '';
+    clientIds.forEach(clientId => {
+        const positions = clientId === 'demo-client' 
+            ? demoData.positions 
+            : clientId === movementData.clientId 
+                ? movementData.positions 
+                : realtimePositions.filter(p => p.clientId === clientId);
+        
+        if (positions && positions.length > 0) {
+            const lastPosition = positions[positions.length - 1];
+            const lastUpdate = new Date(lastPosition.timestamp).toLocaleTimeString();
+            const isActive = Date.now() - lastPosition.timestamp < 5 * 60 * 1000; // Active if updated within 5 minutes
+            
+            const clientItem = document.createElement('div');
+            clientItem.className = `client-item ${selectedClientId === clientId ? 'active' : ''}`;
+            clientItem.dataset.clientId = clientId;
+            clientItem.innerHTML = `
+                <div>
+                    <span class="status-dot ${isActive ? 'status-active' : 'status-inactive'}"></span>
+                    <span class="client-name">${clientId}</span>
+                </div>
+                <div class="client-details">
+                    Last update: ${lastUpdate}
+                </div>
+            `;
+            
+            clientItem.addEventListener('click', () => {
+                selectClient(clientId, positions);
+            });
+            
+            clientList.appendChild(clientItem);
+            
+            // Update markers and paths on the map
+            updateMapForClient(clientId, positions);
+        }
+    });
+    
+    // If no client is selected yet, select the first one
+    if (!selectedClientId && clientIds.size > 0) {
+        selectClient([...clientIds][0]);
+    }
+}
+
+// Function to update map for a client
+function updateMapForClient(clientId, positions) {
+    if (!positions || positions.length === 0) return;
+    
+    // Create or update marker
+    const lastPosition = positions[positions.length - 1];
+    
+    // Get icon style for this client or use default
+    const style = iconStyles[clientId] || iconStyles['default'];
+    const busIcon = createBusIcon(style.color, style.borderColor);
+    
+    if (!markers[clientId]) {
+        markers[clientId] = L.marker([lastPosition.lat, lastPosition.lng], {
+            icon: busIcon
+        }).addTo(map);
+        markers[clientId].bindPopup(`Client: ${clientId}`);
+    } else {
+        markers[clientId].setLatLng([lastPosition.lat, lastPosition.lng]);
+        
+        // Update icon if it wasn't a custom icon before
+        if (!markers[clientId].options.icon || markers[clientId].options.icon.options.className !== 'custom-bus-icon-wrapper') {
+            markers[clientId].setIcon(busIcon);
+        }
+    }
+    
+    // Create or update path
+    const pathCoordinates = positions.map(pos => [pos.lat, pos.lng]);
+    if (!paths[clientId]) {
+        paths[clientId] = L.polyline(pathCoordinates, {
+            color: style.color,
+            weight: 3,
+            opacity: pathsVisible ? 0.7 : 0
+        }).addTo(map);
+    } else {
+        paths[clientId].setLatLngs(pathCoordinates);
+        paths[clientId].setStyle({ color: style.color });
+    }
+    
+    // If this is the selected client, update stats
+    if (clientId === selectedClientId) {
+        updateClientStats(positions);
+    }
+}
+
+// Get a consistent color for a client based on ID
+function getClientColor(clientId) {
+    // Use our predefined colors if available
+    if (iconStyles[clientId]) {
+        return iconStyles[clientId].color;
+    }
+    
+    // Simple hash function to convert clientId to a color
+    const hash = clientId.split('').reduce((acc, char) => {
+        return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    
+    // Convert hash to RGB
+    const r = (hash & 0xFF) % 200; // Keeping it below 200 for better visibility
+    const g = ((hash >> 8) & 0xFF) % 200;
+    const b = ((hash >> 16) & 0xFF) % 200;
+    
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Function to select a client
+function selectClient(clientId, positions) {
+    // Deactivate previous selection
+    if (selectedClientId) {
+        const prevSelected = document.querySelector(`.client-item[data-client-id="${selectedClientId}"]`);
+        if (prevSelected) prevSelected.classList.remove('active');
+    }
+    
+    // Activate new selection
+    selectedClientId = clientId;
+    const newSelected = document.querySelector(`.client-item[data-client-id="${clientId}"]`);
+    if (newSelected) newSelected.classList.add('active');
+    
+    // If positions weren't provided, try to find them
+    if (!positions) {
+        // Try to get from localStorage or demoData
+        if (clientId === 'demo-client') {
+            positions = demoData.positions;
+        } else {
+            const realtimePositions = JSON.parse(localStorage.getItem('realtimePosition') || '[]');
+            positions = realtimePositions.filter(p => p.clientId === clientId);
+            
+            if (positions.length === 0) {
+                const movementData = JSON.parse(localStorage.getItem('movementData') || '{}');
+                if (movementData.clientId === clientId) {
+                    positions = movementData.positions;
+                }
+            }
+        }
+    }
+    
+    if (positions && positions.length > 0) {
+        // Center map on the last position
+        const lastPos = positions[positions.length - 1];
+        map.setView([lastPos.lat, lastPos.lng], 15);
+        
+        // Update stats
+        updateClientStats(positions);
+    }
+}
+
+// Function to update client stats
+function updateClientStats(positions) {
+    if (!positions || positions.length < 2) {
+        document.getElementById('current-speed').textContent = '0 km/h';
+        document.getElementById('distance-covered').textContent = '0 km';
+        document.getElementById('duration').textContent = '00:00:00';
+        document.getElementById('last-update').textContent = '-';
+        return;
+    }
+    
+    // Calculate total distance
+    let totalDistance = 0;
+    for (let i = 1; i < positions.length; i++) {
+        totalDistance += calculateDistance(
+            positions[i-1].lat, positions[i-1].lng,
+            positions[i].lat, positions[i].lng
+        );
+    }
+    
+    // Calculate duration
+    const startTime = positions[0].timestamp;
+    const endTime = positions[positions.length - 1].timestamp;
+    const durationMs = endTime - startTime;
+    const durationHours = Math.floor(durationMs / 3600000);
+    const durationMinutes = Math.floor((durationMs % 3600000) / 60000);
+    const durationSeconds = Math.floor((durationMs % 60000) / 1000);
+    const durationFormatted = `${String(durationHours).padStart(2, '0')}:${String(durationMinutes).padStart(2, '0')}:${String(durationSeconds).padStart(2, '0')}`;
+    
+    // Calculate current speed (based on last two points)
+    let currentSpeed = 0;
+    if (positions.length >= 2) {
+        const p1 = positions[positions.length - 2];
+        const p2 = positions[positions.length - 1];
+        const segmentDistance = calculateDistance(p1.lat, p1.lng, p2.lat, p2.lng);
+        const timeDiffSeconds = (p2.timestamp - p1.timestamp) / 1000;
+        if (timeDiffSeconds > 0) {
+            currentSpeed = (segmentDistance / timeDiffSeconds) * 3600; // Convert to km/h
+        }
+    }
+    
+    // Update the UI
+    document.getElementById('current-speed').textContent = `${currentSpeed.toFixed(1)} km/h`;
+    document.getElementById('distance-covered').textContent = `${totalDistance.toFixed(2)} km`;
+    document.getElementById('duration').textContent = durationFormatted;
+    document.getElementById('last-update').textContent = new Date(positions[positions.length - 1].timestamp).toLocaleTimeString();
+}
+
+// Function to calculate distance between two points (Haversine formula)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const distance = R * c; // Distance in km
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI/180);
+}
+
+// Function to load demo data
+function loadDemoData() {
+    // Store demo data in localStorage
+    localStorage.setItem('realtimePosition', JSON.stringify(demoData.positions.map(pos => ({
+        ...pos,
+        clientId: demoData.clientId
+    }))));
+    
+    // Refresh display
+    refreshData();
+    
+    // Select the demo client
+    selectClient('demo-client', demoData.positions);
+}
+
+// Function to simulate movement
+function simulateMovement() {
+    // Stop if already simulating
+    if (simulationInterval) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+        document.getElementById('simulate-movement').textContent = 'Simulate Movement';
+        return;
+    }
+    
+    // Generate a random route starting from the last position of demo data
+    const startPos = demoData.positions[demoData.positions.length - 1];
+    const simulatedRoute = [];
+    
+    // Starting with the last known position
+    let currentLat = startPos.lat;
+    let currentLng = startPos.lng;
+    let currentTime = Date.now() - 60000; // Starting one minute ago
+    
+    // Create 60 points for a simulated route
+    for (let i = 0; i < 60; i++) {
+        // Add small random movement
+        currentLat += (Math.random() - 0.5) * 0.001;
+        currentLng += (Math.random() - 0.5) * 0.001;
+        currentTime += 1000; // Add one second
+        
+        simulatedRoute.push({
+            lat: currentLat,
+            lng: currentLng,
+            timestamp: currentTime,
+            accuracy: Math.floor(Math.random() * 10) + 3,
+            clientId: 'simulated-client'
+        });
+    }
+    
+    // Store the initial position
+    localStorage.setItem('realtimePosition', JSON.stringify([simulatedRoute[0]]));
+    refreshData();
+    selectClient('simulated-client', [simulatedRoute[0]]);
+    
+    // Start the simulation
+    demoPositionIndex = 1;
+    document.getElementById('simulate-movement').textContent = 'Stop Simulation';
+    
+    simulationInterval = setInterval(() => {
+        if (demoPositionIndex < simulatedRoute.length) {
+            // Get current positions
+            const currentPositions = JSON.parse(localStorage.getItem('realtimePosition') || '[]');
+            
+            // Add new position
+            currentPositions.push(simulatedRoute[demoPositionIndex]);
+            
+            // Update localStorage
+            localStorage.setItem('realtimePosition', JSON.stringify(currentPositions));
+            
+            // Refresh display
+            refreshData();
+            
+            // Increment index
+            demoPositionIndex++;
+        } else {
+            // Stop simulation when done
+            clearInterval(simulationInterval);
+            simulationInterval = null;
+            document.getElementById('simulate-movement').textContent = 'Simulate Movement';
+        }
+    }, 1000); // Update every second
+}
+
+// Function to toggle path visibility
+function togglePath() {
+    pathsVisible = !pathsVisible;
+    
+    // Update all paths
+    Object.values(paths).forEach(path => {
+        path.setStyle({ opacity: pathsVisible ? 0.7 : 0 });
+    });
+    
+    // Update button text
+    document.getElementById('toggle-path').textContent = pathsVisible ? 'Hide Path' : 'Show Path';
+}
+
+// Function to center map on selected client
+function centerMap() {
+    if (selectedClientId && markers[selectedClientId]) {
+        const position = markers[selectedClientId].getLatLng();
+        map.setView(position, 15);
+    }
+}
+
+// Add custom CSS
+const customCSS = `
+.custom-bus-icon-wrapper {
+    background: transparent;
+    border: none;
+}
+
+.custom-bus-icon {
+    transition: transform 0.3s ease;
+}
+
+.custom-bus-icon:hover {
+    transform: scale(1.1);
+}
+`;
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    // Add custom CSS to head
+    const styleElement = document.createElement('style');
+    styleElement.textContent = customCSS;
+    document.head.appendChild(styleElement);
+    
+    // Load Leaflet map
+    loadLeaflet().catch(err => {
+        console.error('Failed to initialize map:', err);
+    });
+    
+    // Set up event listeners
+    document.getElementById('refresh-data').addEventListener('click', refreshData);
+    document.getElementById('toggle-path').addEventListener('click', togglePath);
+    document.getElementById('center-map').addEventListener('click', centerMap);
+    document.getElementById('load-demo-data').addEventListener('click', loadDemoData);
+    document.getElementById('simulate-movement').addEventListener('click', simulateMovement);
+    
+    // Initial data load
+    refreshData();
+    
+    // Set up periodic refresh
+    setInterval(refreshData, 5000); // Refresh every 5 seconds
+});
+    </script>
+</body>
+</html>
